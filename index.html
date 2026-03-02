@@ -6,8 +6,8 @@
     <title>Trợ Lý Vận Động - Xóa Bỏ Cơn Đau Chốn Công Sở</title>
     <style>
         :root {
-            --blue-light: #f0f9ff; /* Màu nền sáng hơn để ảnh hòa vào đẹp hơn */
-            --blue-primary: #0ea5e9; /* Xanh dương tươi hơn */
+            --blue-light: #f0f9ff;
+            --blue-primary: #0ea5e9;
             --blue-dark: #0369a1; 
             --text-main: #334155; 
             --text-muted: #64748b;
@@ -29,44 +29,39 @@
         .btn-nav-cta:hover { background-color: var(--blue-dark) !important; transform: translateY(-2px); }
 
         /* =========================================
-           PHẦN 1: HERO SECTION (Đã sửa hiệu ứng ảnh)
+           PHẦN 1: HERO SECTION
            ========================================= */
         #gioi-thieu {
             padding: 140px 5% 100px; min-height: 95vh; display: flex; align-items: center;
-            /* Nền gradient nhẹ nhàng */
             background: radial-gradient(circle at top left, #ffffff, var(--blue-light));
-            overflow: hidden; /* Để cắt phần ảnh thừa */
+            overflow: hidden; 
         }
         .container { max-width: 1200px; margin: 0 auto; width: 100%; position: relative; }
         .row { display: flex; align-items: center; }
-        .col-text { flex: 1; padding-right: 50px; z-index: 2; } /* Chữ nằm trên ảnh */
+        .col-text { flex: 1; padding-right: 50px; z-index: 2; } 
         .col-image { 
             flex: 1.2; height: 600px; position: relative;
-            /* Đẩy ảnh sang phải một chút để tạo không gian cho chữ */
             transform: translateX(50px);
         }
 
-        /* Đã xóa .hero-tag */
         h1 { color: var(--text-main); font-size: 48px; margin-bottom: 25px; line-height: 1.15; font-weight: 900;}
         .intro-text { font-size: 18px; color: var(--text-muted); margin-bottom: 30px; text-align: justify; max-width: 550px;}
         
-        /* Hiệu ứng ảnh hòa vào nền */
         .hero-image-container {
             width: 100%; height: 100%;
-            /* Mặt nạ làm mờ dần từ phải sang trái */
             -webkit-mask-image: linear-gradient(to left, black 40%, transparent 100%);
             mask-image: linear-gradient(to left, black 40%, transparent 100%);
         }
         .hero-image {
             width: 100%; height: 100%; object-fit: cover;
-            object-position: center 20%; /* Căn chỉnh vị trí ảnh */
+            object-position: center 20%; 
         }
 
         .btn-primary { display: inline-block; background-color: var(--blue-primary); color: white; padding: 18px 40px; border-radius: 50px; font-size: 18px; font-weight: bold; text-decoration: none; box-shadow: 0 10px 25px rgba(14, 165, 233, 0.4); transition: 0.3s; }
         .btn-primary:hover { background-color: var(--blue-dark); transform: translateY(-3px); box-shadow: 0 15px 30px rgba(14, 165, 233, 0.5); }
 
         /* =========================================
-           PHẦN 2: LỊCH TRÌNH (Bố cục 2x2)
+           PHẦN 2: LỊCH TRÌNH
            ========================================= */
         section { padding: 100px 5%; }
         .section-header { text-align: center; max-width: 700px; margin: 0 auto 60px; }
@@ -74,7 +69,6 @@
         .section-desc { font-size: 18px; color: var(--text-muted); }
         
         #lich-trinh { background-color: white; }
-        /* Grid 2 cột cố định */
         .schedule-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 1000px; margin: 0 auto; }
         .week-card { background: white; border-radius: 25px; overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.08); transition: 0.3s; border: 1px solid #f1f5f9; display: flex; flex-direction: column; }
         .week-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(14, 165, 233, 0.2); border-color: var(--blue-light);}
@@ -87,7 +81,7 @@
         .btn-detail:hover { background-color: var(--blue-primary); color: white; border-color: var(--blue-primary); }
 
         /* =========================================
-           PHẦN 3 & 4: KIẾN THỨC & ĐÁNH GIÁ (Khôi phục cũ)
+           PHẦN 3 & 4: KIẾN THỨC & ĐÁNH GIÁ
            ========================================= */
         #kien-thuc { background-color: var(--blue-light); text-align: center; }
         #khao-sat { background-color: white; text-align: center; }
@@ -101,7 +95,7 @@
         .placeholder-title { color: var(--blue-primary); font-size: 24px; margin-bottom: 15px; }
 
         /* =========================================
-           CTA CUỐI TRANG (Khôi phục cũ)
+           CTA CUỐI TRANG
            ========================================= */
         .cta-container {
             text-align: center; padding: 100px 5%;
@@ -124,10 +118,10 @@
             .col-text { padding-right: 0; margin-bottom: 50px; }
             .intro-text { margin: 0 auto 30px; }
             .col-image { transform: none; height: 400px; width: 100%; }
-            .hero-image-container { -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%); mask-image: linear-gradient(to bottom, black 50%, transparent 100%); } /* Đổi chiều mờ trên mobile */
+            .hero-image-container { -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%); mask-image: linear-gradient(to bottom, black 50%, transparent 100%); }
             h1 { font-size: 36px; }
             .nav-links { display: none; }
-            .schedule-grid { grid-template-columns: 1fr; } /* Về 1 cột trên mobile */
+            .schedule-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -151,7 +145,7 @@
                     <h1>Đánh Thức Cơ Thể Nơi Công Sở – Làm Việc Hiệu Quả, Tạm Biệt Cơn Đau</h1>
                     <p class="intro-text">Chúng ta dành 8 tiếng mỗi ngày "đóng băng" trên ghế, khiến cơ thể kêu cứu bằng những cơn đau mỏi vai gáy dai dẳng. Bạn biết mình cần vận động, nhưng công việc cuốn đi khiến bạn quên mất.</p>
                     <p class="intro-text">Website này không chỉ là một chiếc đồng hồ nhắc nhở vô tri. Đây là một <strong>Trợ lý Vận động Kỹ thuật số</strong>, cung cấp cho bạn một phác đồ khoa học 4 tuần để chủ động phá vỡ thói quen ngồi lỳ, tái tạo năng lượng ngay tại bàn làm việc mà không làm gián đoạn dòng chảy công việc của bạn.</p>
-                    <a href="timer.html" class="btn-primary">Bắt đầu phiên làm việc ngay ➔</a>
+                    <a href="timer.html" class="btn-primary">Bắt đầu ngay ➔</a>
                 </div>
                 <div class="col-image fade-in">
                     <div class="hero-image-container">
@@ -164,7 +158,7 @@
 
     <section id="lich-trinh">
         <div class="section-header fade-in">
-            <h2 class="section-title">Phác Đồ Vận Động 4 Tuần</h2>
+            <h2 class="section-title">Lộ trình tập luyện 4 tuần</h2>
             <p class="section-desc">Lộ trình tăng tiến khoa học, được thiết kế chuyên biệt cho môi trường văn phòng.</p>
         </div>
         
@@ -175,7 +169,7 @@
                     <span class="week-tag">Tuần 1</span>
                     <h3 class="week-title">Nhận thức & Làm quen</h3>
                     <p class="week-details">Các bài tập hít thở và vận động nhẹ nhàng để "đánh thức" cơ thể đang ngủ quên.</p>
-                    <a href="tuan-1.html" class="btn-detail">Xem chi tiết Tuần 1</a>
+                    <a href="tuan-1.html" class="btn-detail">Chi tiết</a>
                 </div>
             </div>
             <div class="week-card fade-in">
@@ -184,7 +178,7 @@
                     <span class="week-tag">Tuần 2</span>
                     <h3 class="week-title">Giảm đau & Kéo giãn</h3>
                     <p class="week-details">Tập trung kéo giãn các nhóm cơ cổ, vai, lưng đang bị co cứng do ngồi lâu.</p>
-                    <a href="tuan-2.html" class="btn-detail">Xem chi tiết Tuần 2</a>
+                    <a href="tuan-2.html" class="btn-detail">Chi tiết</a>
                 </div>
             </div>
             <div class="week-card fade-in">
@@ -193,7 +187,7 @@
                     <span class="week-tag">Tuần 3</span>
                     <h3 class="week-title">Tăng cường sức mạnh</h3>
                     <p class="week-details">Kích hoạt các nhóm cơ lõi (core) để hỗ trợ cột sống vững chắc hơn.</p>
-                    <a href="tuan-3.html" class="btn-detail">Xem chi tiết Tuần 3</a>
+                    <a href="tuan-3.html" class="btn-detail">Chi tiết</a>
                 </div>
             </div>
             <div class="week-card fade-in">
@@ -202,7 +196,7 @@
                     <span class="week-tag">Tuần 4</span>
                     <h3 class="week-title">Duy trì & Cố định</h3>
                     <p class="week-details">Biến việc vận động thành thói quen tự nhiên để bảo vệ thành quả lâu dài.</p>
-                    <a href="tuan-4.html" class="btn-detail">Xem chi tiết Tuần 4</a>
+                    <a href="tuan-4.html" class="btn-detail">Chi tiết</a>
                 </div>
             </div>
         </div>
@@ -210,18 +204,48 @@
 
     <section id="kien-thuc">
         <div class="section-header fade-in">
-            <h2 class="section-title">Góc Kiến Thức Công Thái Học</h2>
-            <p class="section-desc">Hiểu đúng về cơ thể để bảo vệ bản thân tốt hơn.</p>
+            <h2 class="section-title">Góc Kiến thức</h2>
+            <p class="section-desc">Hiểu đúng về cơ thể để bảo vệ sức khỏe lâu dài tại nơi làm việc.</p>
         </div>
-        <div class="placeholder-box fade-in" style="border-color: var(--blue-primary);">
-            <h3 class="placeholder-title">🛠️ Tính năng đang được xây dựng</h3>
-            <p style="color: var(--text-muted);">Các bài viết chuyên sâu và video hướng dẫn sẽ sớm ra mắt.</p>
+        
+        <div class="schedule-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+            <div class="week-card fade-in">
+                <img src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="week-img" style="height: 180px;">
+                <div class="week-content">
+                    <span class="week-tag">Tư thế</span>
+                    <h3 class="week-title" style="font-size: 18px;">Quy tắc "3 góc 90 độ"</h3>
+                    <p class="week-details" style="font-size: 14px;">Đau mỏi vai gáy thường do màn hình sai vị trí. Hãy thiết lập lại góc làm việc chuẩn ngay lúc này.</p>
+                    <a href="kien-thuc.html#tu-the" class="btn-detail" style="font-size: 14px; padding: 8px;">Đọc bài viết</a>
+                </div>
+            </div>
+            <div class="week-card fade-in">
+                <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="week-img" style="height: 180px;">
+                <div class="week-content">
+                    <span class="week-tag">Cột sống</span>
+                    <h3 class="week-title" style="font-size: 18px;">Đĩa đệm cũng biết "khát"</h3>
+                    <p class="week-details" style="font-size: 14px;">Ngồi lì một chỗ không chỉ làm mỏi cơ, mà còn đang "vắt kiệt" lượng nước bên trong cột sống của bạn.</p>
+                    <a href="kien-thuc.html#dia-dem" class="btn-detail" style="font-size: 14px; padding: 8px;">Đọc bài viết</a>
+                </div>
+            </div>
+            <div class="week-card fade-in">
+                <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="week-img" style="height: 180px;">
+                <div class="week-content">
+                    <span class="week-tag">Cơ xương khớp</span>
+                    <h3 class="week-title" style="font-size: 18px;">Hội chứng "Mông chết"</h3>
+                    <p class="week-details" style="font-size: 14px;">Ngồi nhiều làm cơ mông bị ức chế, khiến lưng dưới phải gánh vác toàn bộ áp lực cơ thể.</p>
+                    <a href="kien-thuc.html#co-mong" class="btn-detail" style="font-size: 14px; padding: 8px;">Đọc bài viết</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;" class="fade-in">
+            <a href="kien-thuc.html" class="btn-primary" style="background-color: white; color: var(--blue-primary); border: 2px solid var(--blue-primary); box-shadow: none;">📖 Xem toàn bộ cẩm nang</a>
         </div>
     </section>
 
     <section id="khao-sat">
         <div class="section-header fade-in">
-            <h2 class="section-title">Theo Dõi Mức Độ Đau</h2>
+            <h2 class="section-title">Đánh giá</h2>
             <p class="section-desc">Đánh giá định kỳ để thấy rõ hiệu quả của lộ trình.</p>
         </div>
         <div class="placeholder-box fade-in" style="border-color: var(--orange-primary);">

@@ -26,8 +26,24 @@
         
         .header-tools { display: flex; gap: 10px; align-items: center; }
         .daily-streak { background-color: white; color: var(--orange-primary); font-weight: bold; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--orange-light); display: flex; align-items: center; gap: 5px; font-size: 15px;}
-        .btn-icon-tool { background-color: white; color: var(--blue-dark); border: none; font-weight: bold; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; }
+        
+        /* KHU VỰC ĐIỀU CHỈNH ÂM LƯỢNG (MỚI) */
+        .volume-wrapper { position: relative; display: inline-block; }
+        .btn-icon-tool { background-color: white; color: var(--blue-dark); border: none; font-weight: bold; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; width: 45px; text-align: center;}
         .btn-icon-tool:hover { background-color: #e2e8f0; }
+        
+        .volume-popup { position: absolute; top: 120%; right: 0; background: white; padding: 12px 15px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 10; display: flex; align-items: center; gap: 10px;}
+        .volume-wrapper:hover .volume-popup { opacity: 1; visibility: visible; transform: translateY(-5px); }
+        
+        /* Style cho thanh trượt Slider */
+        input[type=range] { -webkit-appearance: none; width: 100px; background: transparent; cursor: pointer;}
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: var(--blue-primary); margin-top: -6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s;}
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #cbd5e1; border-radius: 2px; }
+        input[type=range]:focus { outline: none; }
+        /* Dành cho Firefox */
+        input[type=range]::-moz-range-thumb { height: 16px; width: 16px; border-radius: 50%; background: var(--blue-primary); border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
+        input[type=range]::-moz-range-track { width: 100%; height: 4px; cursor: pointer; background: #cbd5e1; border-radius: 2px; }
 
         .config-container { display: flex; gap: 20px; margin-top: 10px; flex-wrap: wrap; justify-content: center; background-color: white; padding: 15px 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: 0.3s ease; }
         .config-item { display: flex; align-items: center; gap: 10px; }
@@ -90,6 +106,16 @@
         .btn-close { width: 100%; background-color: #e2e8f0; color: #475569; padding: 12px; font-size: 16px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s;}
         .btn-close:hover { background-color: #cbd5e1; }
 
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #1e293b; color: #fff;
+            text-align: center; border-radius: 8px; padding: 16px 20px; position: fixed;
+            z-index: 3000; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-size: 15px; box-shadow: 0px 10px 30px rgba(0,0,0,0.3); font-weight: 500;
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 3.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
         body.exercise-mode { background-color: #fffbeb; }
         body.exercise-mode .session-title, body.exercise-mode .time-display { color: var(--orange-primary); }
         body.exercise-mode .progress-circle { stroke: var(--orange-primary); }
@@ -103,7 +129,15 @@
         <a href="index.html" class="btn-back"><span>&#8592;</span> Trang chủ</a>
         <div class="header-tools">
             <div class="daily-streak" id="dailyStreakCount">🔥 Hôm nay: 0 bài</div>
-            <button class="btn-icon-tool" id="btnMute" onclick="toggleMute()" title="Bật/Tắt âm thanh">🔊</button>
+            
+            <div class="volume-wrapper">
+                <button class="btn-icon-tool" id="btnMute" onclick="toggleMute()" title="Bật/Tắt âm thanh">🔊</button>
+                <div class="volume-popup">
+                    <span style="font-size: 14px; color: #64748b;">Mức âm:</span>
+                    <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="1" oninput="changeVolume()">
+                </div>
+            </div>
+            
         </div>
     </header>
 
@@ -167,140 +201,27 @@
         </div>
     </div>
 
-    <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+    <div id="toast">Thông báo</div>
+
+    <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2820/2820-preview.mp3" preload="auto"></audio>
 
     <script>
-        // =========================================
-        // CƠ SỞ DỮ LIỆU ĐÃ ĐƯỢC RÀ SOÁT TÁCH RIÊNG TỪNG BÀI
-        // Thời gian giữ và lặp lại được quy đổi thành tổng giây (duration)
-        // =========================================
         const exerciseDB = {
             "1": { 
-                "246": { 
-                    "sang": [
-                        { name: "Hít thở", duration: 120, details: ["Hít sâu vào bằng mũi thở ra chậm bằng miệng (thở ra gấp 2 - 3 lần hít vào)."] },
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Gập duỗi cổ", duration: 120, details: ["Hít thở kết hợp gập duỗi cổ nhẹ nhàng."] }
-                    ], 
-                    "chieu": [
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Gập thân & Ưỡn người", duration: 120, details: ["Gập thân mình tới trước / ưỡn người về phía sau."] }
-                    ], 
-                    "toi": [
-                        { name: "Xoay cổ", duration: 300, details: ["Xoay cổ sang trái / phải giữ lại 30s lặp lại 5 lần."] },
-                        { name: "Nghiêng đầu", duration: 300, details: ["Nghiêng đầu sang trái / phải giữ lại 30s lặp lại 5 lần."] }
-                    ] 
-                }, 
-                "357": { 
-                    "sang": [
-                        { name: "Hít thở kết hợp xoay vai", duration: 120, details: ["Hít sâu vào bằng mũi thở ra chậm bằng miệng, thở ra gấp 2 - 3 lần hít vào.", "Kết hợp xoay vai."] },
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Hít thở xoay thân mình", duration: 120, details: ["Hít thở kết hợp xoay thân mình sang trái / phải."] }
-                    ], 
-                    "chieu": [
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Đứng lên xoay hông", duration: 120, details: ["Đứng lên xoay hông 10 lần."] }
-                    ], 
-                    "toi": [
-                        { name: "Xoay cổ", duration: 300, details: ["Xoay cổ sang trái / phải giữ lại 30s lặp lại 5 lần."] },
-                        { name: "Nghiêng đầu", duration: 300, details: ["Nghiêng đầu sang trái / phải giữ lại 30s lặp lại 5 lần."] }
-                    ] 
-                } 
+                "246": { "sang": [{ name: "Hít thở", duration: 120, details: ["Hít sâu vào mũi thở ra chậm bằng miệng (thở ra gấp 2-3 lần hít vào)."] }, { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đi uống nước, vệ sinh,...)."] }, { name: "Gập duỗi cổ", duration: 120, details: ["Hít thở kết hợp gập duỗi cổ nhẹ nhàng."] }], "chieu": [{ name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Gập thân & Ưỡn người", duration: 120, details: ["Gập thân mình tới trước / ưỡn người về phía sau."] }], "toi": [{ name: "Xoay cổ", duration: 300, details: ["Xoay cổ sang trái / phải giữ lại 30s lặp lại 5 lần."] }, { name: "Nghiêng đầu", duration: 300, details: ["Nghiêng đầu sang trái / phải giữ lại 30s lặp lại 5 lần."] }] }, 
+                "357": { "sang": [{ name: "Hít thở kết hợp xoay vai", duration: 120, details: ["Hít sâu kết hợp xoay vai."] }, { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Hít thở xoay thân mình", duration: 120, details: ["Hít thở kết hợp xoay thân mình sang trái / phải."] }], "chieu": [{ name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Đứng lên xoay hông", duration: 120, details: ["Đứng lên xoay hông 10 lần."] }], "toi": [{ name: "Xoay cổ", duration: 300, details: ["Xoay cổ sang trái / phải giữ lại 30s lặp lại 5 lần."] }, { name: "Nghiêng đầu", duration: 300, details: ["Nghiêng đầu sang trái / phải giữ lại 30s lặp lại 5 lần."] }] } 
             },
             "2": { 
-                "246": { 
-                    "sang": [
-                        { name: "Kéo giãn cơ nâng vai", duration: 600, details: ["Ngồi thẳng, bám tay không kéo vào mép ghế để cố định vai.", "Nghiêng đầu sang bên đối diện (tai hướng về vai).", "Dùng tay còn lại ấn nhẹ đầu xuống để tăng độ căng. Không kéo giật mạnh.", "Giữ 60 giây / Lặp lại 5 lần mỗi bên."] },
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Vươn mình", duration: 60, details: ["Vươn mình."] }
-                    ], 
-                    "chieu": [
-                        { name: "Kéo giãn cơ thang trên", duration: 600, details: ["Xoay đầu sang một bên khoảng 45 độ.", "Cúi đầu xuống như thể đang nhìn vào nách của mình.", "Dùng tay cùng phía ấn nhẹ đầu xuống.", "Giữ 60 giây / Lặp lại 5 lần mỗi bên."] },
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] }
-                    ], 
-                    "toi": [
-                        { name: "Kéo giãn Hamstring & Cơ bụng chân", duration: 300, details: ["Ngồi trên giường, duỗi thẳng chân.", "Vươn tay chạm tới ngón chân đến khi thấy vừa căng.", "Giữ 60 giây / Lặp lại 5 lần."] },
-                        { name: "Cat - Cow (Mèo & Bò)", duration: 120, details: ["Chống hai tay và hai gối xuống sàn, lưng thẳng.", "Hít vào: Võng lưng xuống, ngẩng đầu nhìn lên (Con bò).", "Thở ra: Cong lưng lên cao, cúi đầu nhìn xuống rốn (Con mèo).", "Lặp lại chậm rãi 5 – 10 lần."] }
-                    ] 
-                }, 
-                "357": { 
-                    "sang": [
-                        { name: "Tự kéo giãn cơ thang trên", duration: 600, details: ["Gập cổ, nghiêng đối bên, xoay cùng bên.", "Tay giữ cơ thang bên cần kéo giữ tư thế trong 60s lặp lại 5 lần."] },
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Gập thân & Ưỡn người", duration: 120, details: ["Gập thân mình tới trước / ưỡn người về phía sau."] }
-                    ], 
-                    "chieu": [
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Xoay thân mình", duration: 120, details: ["Hít thở kết hợp xoay thân mình sang trái / phải."] }
-                    ], 
-                    "toi": [
-                        { name: "Kéo giãn cơ lưng rộng", duration: 120, details: ["Tư thế em bé: Quỳ trên thảm, hạ thân người về phía trước, trán chạm thảm.", "Duỗi thẳng hai cánh tay về phía trước.", "Giữ tư thế từ 30 giây đến 2 phút."] },
-                        { name: "Kéo giãn cơ mông lớn", duration: 180, details: ["Ép hai chân vào bụng khi đang nằm ngửa."] }
-                    ] 
-                } 
+                "246": { "sang": [{ name: "Kéo giãn cơ nâng vai", duration: 600, details: ["Ngồi thẳng, bám tay không kéo vào mép ghế. Nghiêng đầu sang bên đối diện. Giữ 60s / 5 lần mỗi bên."] }, { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Vươn mình", duration: 60, details: ["Vươn mình."] }], "chieu": [{ name: "Kéo giãn cơ thang trên", duration: 600, details: ["Xoay đầu 45 độ, cúi nhìn nách. Dùng tay ấn nhẹ. Giữ 60s / 5 lần mỗi bên."] }, { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }], "toi": [{ name: "Kéo giãn Hamstring & Bụng chân", duration: 300, details: ["Ngồi trên giường, duỗi thẳng chân, vươn tay chạm ngón chân. Giữ 60s / lặp 5 lần."] }, { name: "Cat - Cow (Mèo & Bò)", duration: 120, details: ["Chống hai tay và hai gối xuống sàn. Võng lưng xuống / Cong lưng lên cao. Lặp 5-10 lần."] }] }, 
+                "357": { "sang": [{ name: "Tự kéo giãn cơ thang trên", duration: 600, details: ["Gập cổ, nghiêng đối bên, xoay cùng bên. Giữ 60s lặp lại 5 lần."] }, { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Gập thân & Ưỡn người", duration: 120, details: ["Gập thân mình tới trước / ưỡn người về phía sau."] }], "chieu": [{ name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Xoay thân mình", duration: 120, details: ["Hít thở kết hợp xoay thân mình sang trái/phải."] }], "toi": [{ name: "Kéo giãn cơ lưng rộng", duration: 120, details: ["Tư thế em bé: Quỳ trên thảm, hạ thân người về phía trước, trán chạm thảm. Giữ 30s-2p."] }, { name: "Kéo giãn cơ mông lớn", duration: 180, details: ["Ép hai chân vào bụng khi đang nằm ngửa."] }] } 
             },
             "3": { 
-                "246": { 
-                    "sang": [
-                        { name: "Kháng lực trước/sau", duration: 120, details: ["Kháng lực 2 hướng (trước/sau) – Đặt tay lên trán/gáy và ấn nhẹ đầu vào lòng bàn tay, bàn tay đẩy trong khi dùng cơ cổ để giữ đầu đứng yên."] },
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Gập bụng tư thế ngồi", duration: 120, details: ["Gập bụng ở tư thế ngồi (ngồi trên lưng thẳng và co 2 chân lên sao cho 2 gối hướng về phía mặt)."] }
-                    ], 
-                    "chieu": [
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Ngồi gập lưng tới trước", duration: 300, details: ["Ngồi trên ghế với lưng thẳng chân vuông góc với sàn.", "Hai tay đồng thời đưa và gập thân về phía trước giữ lại khoảng 10-15 giây sau đó trở về tư thế ban đầu lặp lại 10-20 lần."] }
-                    ], 
-                    "toi": [
-                        { name: "Tư thế Bắc cầu", duration: 180, details: ["Nằm ngửa, co gối. Ấn gót chân, nâng hông lên cao. Thắt chặt cơ mông ở đỉnh động tác. Giữ 5s rồi hạ xuống."] },
-                        { name: "Superman", duration: 600, details: ["Nằm sấp lần lượt nâng tay (P) và chân (T) lên giữ lại 30s/10 lần làm lần lượt từng bên."] }
-                    ] 
-                }, 
-                "357": { 
-                    "sang": [
-                        { name: "Kháng lực nghiêng trái/phải", duration: 120, details: ["Kháng lực 2 hướng (nghiêng trái/phải) – Đặt tay lên hai bên thái dương và ấn nhẹ đầu vào lòng bàn tay, bàn tay đẩy trong khi dùng cơ cổ để giữ đầu đứng yên."] },
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Đứng lên ngồi xuống", duration: 120, details: ["Đứng lên ngồi xuống 10 - 20 lần."] }
-                    ], 
-                    "chieu": [
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Xoay cổ", duration: 60, details: ["Xoay cổ 3-4 vòng."] }
-                    ], 
-                    "toi": [
-                        { name: "Tập Lunge", duration: 180, details: ["Đứng thẳng, bước một chân lên trước. Hạ người xuống cho đến khi hai đầu gối tạo góc khoảng 90°. Đẩy người lên trở lại vị trí ban đầu. Đổi chân và lặp lại."] }
-                    ] 
-                } 
+                "246": { "sang": [{ name: "Kháng lực trước/sau", duration: 120, details: ["Kháng lực 2 hướng – Đặt tay lên trán/gáy và ấn nhẹ đầu vào lòng bàn tay."] }, { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Gập bụng tư thế ngồi", duration: 120, details: ["Ngồi thẳng và co 2 chân lên sao cho 2 gối hướng về phía mặt."] }], "chieu": [{ name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Ngồi gập lưng tới trước", duration: 300, details: ["Ngồi thẳng, gập thân về phía trước giữ 10-15s, lặp 10-20 lần."] }], "toi": [{ name: "Tư thế Bắc cầu", duration: 180, details: ["Nằm ngửa, nâng hông lên cao. Giữ 5s rồi hạ xuống."] }, { name: "Superman", duration: 600, details: ["Nằm sấp lần lượt nâng tay (P) và chân (T) lên giữ 30s/10 lần."] }] }, 
+                "357": { "sang": [{ name: "Kháng lực nghiêng", duration: 120, details: ["Kháng lực 2 hướng (trái/phải) – Đặt tay lên thái dương và ấn nhẹ đầu vào tay."] }, { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Đứng lên ngồi xuống", duration: 120, details: ["Đứng lên ngồi xuống 10 - 20 lần."] }], "chieu": [{ name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Xoay cổ", duration: 60, details: ["Xoay cổ 3-4 vòng."] }], "toi": [{ name: "Tập Lunge", duration: 180, details: ["Bước một chân lên trước. Hạ người xuống tạo góc 90 độ. Đổi chân."] }] } 
             },
             "4": { 
-                "246": { 
-                    "sang": [
-                        { name: "Bài tập ấn cằm (Chin Tuck)", duration: 120, details: ["Đứng hoặc ngồi thẳng lưng tựa vào tường.", "Từ từ thu cằm vào trong sao cho phần sau cổ được kéo dài ra và chạm sát vào tường. Giữ 5s, lặp 10 lần."] },
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Nâng cao đùi", duration: 120, details: ["Đứng lên nâng cao đùi (30 lần)."] }
-                    ], 
-                    "chieu": [
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Gót chạm mông", duration: 120, details: ["Đứng lên gót chạm mông (30 lần)."] }
-                    ], 
-                    "toi": [
-                        { name: "Plank cơ bản", duration: 120, details: ["Chống hai khuỷu tay và mũi chân xuống sàn, giữ người thành một đường thẳng (30-60s)."] },
-                        { name: "Plank nghiêng", duration: 120, details: ["Nằm nghiêng, chống khuỷu tay xuống sàn ngay dưới vai. Nâng hông lên sao cho cơ thể thành một đường thẳng (30-60s mỗi bên)."] }
-                    ] 
-                }, 
-                "357": { 
-                    "sang": [
-                        { name: "Bài tập Y-W", duration: 120, details: ["Nằm sấp hoặc đứng cúi người. Giơ hai tay tạo thành chữ Y, sau đó kéo khuỷu tay xuống sườn để tạo thành chữ W, ép chặt hai bả vai vào nhau."] },
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Gót chạm mông", duration: 120, details: ["Đứng lên gót chạm mông (30 lần)."] }
-                    ], 
-                    "chieu": [
-                        { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)."] },
-                        { name: "Bài tập ấn cằm (Chin Tuck)", duration: 60, details: ["Đứng hoặc ngồi tựa tường, thu cằm vào trong."] }
-                    ], 
-                    "toi": [
-                        { name: "Dead bug", duration: 180, details: ["Nằm ngửa, giơ hai tay lên trời, co hai chân vuông góc. Từ từ hạ tay và chân đối diện xuống."] },
-                        { name: "Bird Dog", duration: 180, details: ["Chống hai tay và hai đầu gối xuống sàn. Duỗi tay trái về phía trước và chân phải về phía sau."] }
-                    ] 
-                } 
+                "246": { "sang": [{ name: "Ấn cằm (Chin Tuck)", duration: 120, details: ["Từ từ thu cằm vào trong giữ 5s, lặp 10 lần."] }, { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Nâng cao đùi", duration: 120, details: ["Nâng cao đùi (30 lần)."] }], "chieu": [{ name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Gót chạm mông", duration: 120, details: ["Gót chạm mông (30 lần)."] }], "toi": [{ name: "Plank cơ bản", duration: 120, details: ["Giữ người thành đường thẳng 30-60s."] }, { name: "Plank nghiêng", duration: 120, details: ["Plank nghiêng 30-60s mỗi bên."] }] }, 
+                "357": { "sang": [{ name: "Bài tập Y-W", duration: 120, details: ["Giơ tay chữ Y, kéo khuỷu tay xuống chữ W."] }, { name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Gót chạm mông", duration: 120, details: ["Gót chạm mông 30 lần."] }], "chieu": [{ name: "Đứng lên và di chuyển", duration: 180, details: ["Đứng lên và di chuyển."] }, { name: "Ấn cằm (Chin Tuck)", duration: 60, details: ["Thu cằm vào trong."] }], "toi": [{ name: "Dead bug", duration: 180, details: ["Nằm ngửa, hạ tay chân chéo nhau."] }, { name: "Bird Dog", duration: 180, details: ["Chống gối, duỗi tay chân chéo nhau."] }] } 
             }
         };
 
@@ -314,8 +235,11 @@
 
         let timerInterval = null;
         let isRunning = false;
-        let isMuted = false;
         let dailyCount = 0;
+
+        // Âm lượng mặc định
+        let currentVolume = 1; 
+        let isMuted = false;
 
         const timeDisplay = document.getElementById('timeDisplay');
         const sessionTitle = document.getElementById('sessionTitle');
@@ -329,31 +253,79 @@
         const workMinInput = document.getElementById('workMinInput');
         const addTimeContainer = document.getElementById('addTimeContainer');
         const alarmSound = document.getElementById('alarmSound');
+        const volumeSlider = document.getElementById('volumeSlider');
         const circleCircumference = 2 * Math.PI * 140;
 
         // =========================================
-        // THỐNG KÊ NGÀY (STREAK) & MUTE ÂM THANH
+        // HỆ THỐNG THÔNG BÁO & ÂM THANH MỚI
         // =========================================
+        function requestNotificationPermission() {
+            if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+                Notification.requestPermission();
+            }
+        }
+
+        function pushOSNotification(title, bodyText) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(title, { body: bodyText, icon: "https://cdn-icons-png.flaticon.com/512/3048/3048122.png" });
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            toast.className = "show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 4000);
+        }
+
+        // Logic Kéo thanh trượt Âm lượng
+        function changeVolume() {
+            currentVolume = parseFloat(volumeSlider.value);
+            alarmSound.volume = currentVolume;
+            localStorage.setItem('pt_volume', currentVolume);
+            
+            if (currentVolume === 0) {
+                isMuted = true;
+                document.getElementById('btnMute').innerText = "🔇";
+            } else {
+                isMuted = false;
+                document.getElementById('btnMute').innerText = currentVolume < 0.5 ? "🔉" : "🔊";
+            }
+        }
+
+        // Logic Click nút Âm thanh (Mute/Unmute)
         function toggleMute() {
-            isMuted = !isMuted;
-            document.getElementById('btnMute').innerText = isMuted ? "🔇" : "🔊";
-            localStorage.setItem('pt_is_muted', isMuted);
+            if (isMuted) {
+                // Khôi phục âm thanh
+                isMuted = false;
+                currentVolume = parseFloat(localStorage.getItem('pt_volume')) || 1;
+                if(currentVolume === 0) currentVolume = 0.5; // Nếu lỡ lưu 0 thì cho lên 50%
+                volumeSlider.value = currentVolume;
+                alarmSound.volume = currentVolume;
+                document.getElementById('btnMute').innerText = currentVolume < 0.5 ? "🔉" : "🔊";
+                showToast(`Âm lượng: ${Math.round(currentVolume * 100)}%`);
+            } else {
+                // Tắt hoàn toàn
+                isMuted = true;
+                alarmSound.volume = 0;
+                volumeSlider.value = 0;
+                document.getElementById('btnMute').innerText = "🔇";
+                showToast("Đã tắt âm thanh nhắc nhở 🔇");
+            }
         }
 
         function playSound() {
-            if (!isMuted) alarmSound.play();
+            if (!isMuted && currentVolume > 0) {
+                alarmSound.currentTime = 0; // Trở về đầu đoạn nhạc
+                alarmSound.play();
+            }
         }
 
         function updateDailyStreak() {
             const today = new Date().toDateString();
             const savedDate = localStorage.getItem('pt_streak_date');
-            
-            if (savedDate !== today) {
-                dailyCount = 0; 
-                localStorage.setItem('pt_streak_date', today);
-            } else {
-                dailyCount = parseInt(localStorage.getItem('pt_daily_count') || 0);
-            }
+            if (savedDate !== today) { dailyCount = 0; localStorage.setItem('pt_streak_date', today); } 
+            else { dailyCount = parseInt(localStorage.getItem('pt_daily_count') || 0); }
             document.getElementById('dailyStreakCount').innerText = `🔥 Hôm nay: ${dailyCount} bài`;
         }
 
@@ -364,26 +336,20 @@
         }
 
         // =========================================
-        // TÍNH NĂNG "SNOOZE" (BẬN HỌP)
+        // SNOOZE & GIA HẠN THỜI GIAN
         // =========================================
         function snoozeTimer() {
-            currentMode = 'WORK';
-            currentTotalTime = WORK_TIME;
-            timeRemaining = 10 * 60; 
-            
-            localStorage.setItem('pt_timer_time', timeRemaining);
-            localStorage.setItem('pt_timer_mode', 'WORK');
-            
+            currentMode = 'WORK'; currentTotalTime = WORK_TIME; timeRemaining = 10 * 60; 
+            localStorage.setItem('pt_timer_time', timeRemaining); localStorage.setItem('pt_timer_mode', 'WORK');
+            showToast("Đã lùi 10 phút. Cột sống đang khóc đấy, ráng xong việc rồi tập nha! 🥲");
             updateUI();
-            toggleTimer(); 
+            if(!isRunning) toggleTimer();
         }
 
-        // TÍNH NĂNG CỘNG THÊM GIỜ TẬP LUYỆN
         function addExerciseTime(seconds) {
             if (currentMode !== 'EXERCISE') return;
-            timeRemaining += seconds;
-            currentTotalTime += seconds;
-            updateUI();
+            timeRemaining += seconds; currentTotalTime += seconds;
+            updateUI(); showToast(`Đã cộng thêm ${seconds} giây. Cố lên! 💪`);
         }
 
         function addCustomExerciseTime() {
@@ -393,13 +359,11 @@
         }
 
         // =========================================
-        // HÀM CHUYỂN ĐỔI GIAO DIỆN & TAB TITLE
+        // CẬP NHẬT GIAO DIỆN CHÍNH
         // =========================================
         function updateUI() {
-            let minutes = Math.floor(timeRemaining / 60);
-            let seconds = timeRemaining % 60;
+            let minutes = Math.floor(timeRemaining / 60); let seconds = timeRemaining % 60;
             let timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
             timeDisplay.innerText = timeString;
             
             let tabStatus = (currentMode === 'WORK') ? "Phiên làm việc" : (currentMode === 'SELECT') ? "Đến giờ tập!" : "Đang tập";
@@ -410,87 +374,51 @@
             progressCircle.style.strokeDashoffset = offset;
 
             if (currentMode === 'WORK') {
-                document.body.classList.remove('exercise-mode');
-                sessionTitle.innerText = "PHIÊN LÀM VIỆC";
-                exerciseSubtitle.innerText = "";
-                selectionPanel.style.display = 'none';
-                mainControls.style.display = 'flex';
-                btnBackToWork.style.display = 'none';
-                btnViewDetail.style.display = 'none';
-                addTimeContainer.style.display = 'none'; 
+                document.body.classList.remove('exercise-mode'); sessionTitle.innerText = "PHIÊN LÀM VIỆC"; exerciseSubtitle.innerText = "";
+                selectionPanel.style.display = 'none'; mainControls.style.display = 'flex';
+                btnBackToWork.style.display = 'none'; btnViewDetail.style.display = 'none'; addTimeContainer.style.display = 'none'; 
             } 
             else if (currentMode === 'SELECT') {
-                document.body.classList.add('exercise-mode');
-                sessionTitle.innerText = "ĐẾN GIỜ VẬN ĐỘNG";
-                exerciseSubtitle.innerText = "";
-                timeDisplay.innerText = "00:00"; 
-                progressCircle.style.strokeDashoffset = circleCircumference;
-                selectionPanel.style.display = 'block';
-                mainControls.style.display = 'none';
-                btnBackToWork.style.display = 'none';
-                btnViewDetail.style.display = 'none'; 
-                addTimeContainer.style.display = 'none'; 
+                document.body.classList.add('exercise-mode'); sessionTitle.innerText = "ĐẾN GIỜ VẬN ĐỘNG"; exerciseSubtitle.innerText = "";
+                timeDisplay.innerText = "00:00"; progressCircle.style.strokeDashoffset = circleCircumference;
+                selectionPanel.style.display = 'block'; mainControls.style.display = 'none';
+                btnBackToWork.style.display = 'none'; btnViewDetail.style.display = 'none'; addTimeContainer.style.display = 'none'; 
                 loadExercisesForCurrentSlot();
             }
             else if (currentMode === 'EXERCISE') {
-                document.body.classList.add('exercise-mode');
-                sessionTitle.innerText = "ĐANG TẬP LUYỆN";
-                selectionPanel.style.display = 'none';
-                mainControls.style.display = 'flex';
-                btnBackToWork.style.display = 'none';
-                btnViewDetail.style.display = 'inline-block'; 
-                addTimeContainer.style.display = 'flex'; 
+                document.body.classList.add('exercise-mode'); sessionTitle.innerText = "ĐANG TẬP LUYỆN";
+                selectionPanel.style.display = 'none'; mainControls.style.display = 'flex';
+                btnBackToWork.style.display = 'none'; btnViewDetail.style.display = 'inline-block'; addTimeContainer.style.display = 'flex'; 
             }
         }
 
         function loadExercisesForCurrentSlot() {
-            const currentWeek = document.getElementById('weekSelect').value;
-            const now = new Date();
-            const dayOfWeek = now.getDay(); 
-            const currentHour = now.getHours();
-
-            let dayGroup = (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5) ? "246" : "357";
-            let timeSlot = (currentHour < 12) ? "sang" : (currentHour < 18) ? "chieu" : "toi";
+            const currentWeek = document.getElementById('weekSelect').value; const now = new Date();
+            let dayGroup = (now.getDay() === 1 || now.getDay() === 3 || now.getDay() === 5) ? "246" : "357";
+            let timeSlot = (now.getHours() < 12) ? "sang" : (now.getHours() < 18) ? "chieu" : "toi";
 
             currentExerciseList = exerciseDB[currentWeek][dayGroup][timeSlot];
-            const container = document.getElementById('exerciseOptionsContainer');
-            container.innerHTML = "";
-            
+            const container = document.getElementById('exerciseOptionsContainer'); container.innerHTML = "";
             currentExerciseList.forEach((task, index) => {
-                let div = document.createElement("div");
-                div.className = "exercise-option-btn";
+                let div = document.createElement("div"); div.className = "exercise-option-btn";
                 div.innerHTML = `<span class="opt-name">${task.name}</span><span class="opt-time">${task.duration}s</span>`;
-                div.onclick = () => selectExercise(index);
-                container.appendChild(div);
+                div.onclick = () => selectExercise(index); container.appendChild(div);
             });
         }
 
         function selectExercise(index) {
-            currentTaskObj = currentExerciseList[index];
-            currentExerciseDuration = currentTaskObj.duration;
-            currentTotalTime = currentExerciseDuration;
-            timeRemaining = currentExerciseDuration;
-            currentMode = 'EXERCISE';
-            
-            exerciseSubtitle.innerText = `Đang chọn: ${currentTaskObj.name}`;
-            startBtn.innerText = "Bắt đầu tập";
-            updateUI();
-            openDetailModal(); 
+            currentTaskObj = currentExerciseList[index]; currentExerciseDuration = currentTaskObj.duration;
+            currentTotalTime = currentExerciseDuration; timeRemaining = currentExerciseDuration; currentMode = 'EXERCISE';
+            exerciseSubtitle.innerText = `Đang chọn: ${currentTaskObj.name}`; startBtn.innerText = "Bắt đầu tập";
+            updateUI(); openDetailModal(); 
         }
 
         function openDetailModal() {
-            if(!currentTaskObj) return;
-            document.getElementById('detailTitle').innerText = currentTaskObj.name;
-            const ul = document.getElementById('detailSteps');
-            ul.innerHTML = "";
-            currentTaskObj.details.forEach(step => {
-                let li = document.createElement("li");
-                li.innerText = step;
-                ul.appendChild(li);
-            });
+            if(!currentTaskObj) return; document.getElementById('detailTitle').innerText = currentTaskObj.name;
+            const ul = document.getElementById('detailSteps'); ul.innerHTML = "";
+            currentTaskObj.details.forEach(step => { let li = document.createElement("li"); li.innerText = step; ul.appendChild(li); });
             document.getElementById('detailModal').classList.add('active');
         }
-
         function closeDetailModal() { document.getElementById('detailModal').classList.remove('active'); }
 
         // =========================================
@@ -499,72 +427,61 @@
         function updateWorkTime() {
             let newVal = parseInt(workMinInput.value);
             if (newVal > 0) {
-                WORK_TIME = newVal * 60;
-                localStorage.setItem('pt_custom_work', WORK_TIME);
-                if (currentMode === 'WORK') { resetTimer(); }
-            } else {
-                alert("Vui lòng nhập số phút hợp lệ (>0)!");
-                workMinInput.value = WORK_TIME / 60; 
-            }
+                WORK_TIME = newVal * 60; localStorage.setItem('pt_custom_work', WORK_TIME);
+                if (currentMode === 'WORK') resetTimer(); showToast(`Đã đổi thời gian làm việc thành ${newVal} phút.`);
+            } else { alert("Vui lòng nhập số phút hợp lệ (>0)!"); workMinInput.value = WORK_TIME / 60; }
         }
 
         function saveWeek() { localStorage.setItem('pt_current_week', document.getElementById('weekSelect').value); }
 
         function loadFromLocalStorage() {
-            const savedMute = localStorage.getItem('pt_is_muted');
-            if (savedMute === 'true') { isMuted = true; document.getElementById('btnMute').innerText = "🔇"; }
+            // Load Âm lượng
+            const savedVolume = localStorage.getItem('pt_volume');
+            if (savedVolume !== null) {
+                currentVolume = parseFloat(savedVolume);
+                volumeSlider.value = currentVolume;
+                alarmSound.volume = currentVolume;
+                if (currentVolume === 0) {
+                    isMuted = true; document.getElementById('btnMute').innerText = "🔇";
+                } else {
+                    document.getElementById('btnMute').innerText = currentVolume < 0.5 ? "🔉" : "🔊";
+                }
+            }
 
             const customWork = localStorage.getItem('pt_custom_work');
             if (customWork) { WORK_TIME = parseInt(customWork); workMinInput.value = WORK_TIME / 60; }
 
             const savedMode = localStorage.getItem('pt_timer_mode');
             const savedTime = localStorage.getItem('pt_timer_time');
-            
-            if (savedMode === 'WORK' && savedTime !== null) { 
-                currentMode = 'WORK'; currentTotalTime = WORK_TIME; timeRemaining = parseInt(savedTime); 
-            } else { 
-                currentMode = 'WORK'; currentTotalTime = WORK_TIME; timeRemaining = WORK_TIME; 
-            }
+            if (savedMode === 'WORK' && savedTime !== null) { currentMode = 'WORK'; currentTotalTime = WORK_TIME; timeRemaining = parseInt(savedTime); } 
+            else { currentMode = 'WORK'; currentTotalTime = WORK_TIME; timeRemaining = WORK_TIME; }
 
             const savedWeek = localStorage.getItem('pt_current_week');
-            if (savedWeek) { document.getElementById('weekSelect').value = savedWeek; }
+            if (savedWeek) document.getElementById('weekSelect').value = savedWeek;
 
-            updateDailyStreak();
-            updateUI();
+            updateDailyStreak(); updateUI();
         }
 
         function toggleTimer() {
+            requestNotificationPermission();
             if (isRunning) {
-                clearInterval(timerInterval);
-                startBtn.innerText = "Tiếp tục";
-                isRunning = false;
+                clearInterval(timerInterval); startBtn.innerText = "Tiếp tục"; isRunning = false;
             } else {
-                startBtn.innerText = "Tạm dừng";
-                isRunning = true;
+                startBtn.innerText = "Tạm dừng"; isRunning = true;
                 timerInterval = setInterval(() => {
                     timeRemaining--;
-                    
-                    if(currentMode === 'WORK') {
-                        localStorage.setItem('pt_timer_time', timeRemaining);
-                        localStorage.setItem('pt_timer_mode', 'WORK');
-                    }
-
+                    if(currentMode === 'WORK') { localStorage.setItem('pt_timer_time', timeRemaining); localStorage.setItem('pt_timer_mode', 'WORK'); }
                     updateUI();
                     
                     if (timeRemaining <= 0) { 
-                        clearInterval(timerInterval);
-                        isRunning = false;
-                        playSound(); 
+                        clearInterval(timerInterval); isRunning = false; playSound(); 
 
                         if (currentMode === 'WORK') {
-                            currentMode = 'SELECT';
-                            updateUI();
+                            currentMode = 'SELECT'; pushOSNotification("Đến giờ vận động rồi! 🚀", "Hãy đứng dậy vài phút để giải phóng cột sống của bạn nhé."); updateUI();
                         } else if (currentMode === 'EXERCISE') {
-                            increaseStreak(); 
+                            increaseStreak(); pushOSNotification("Tuyệt vời! 🎉", "Bạn đã hoàn thành bài tập. Tiếp tục giữ phong độ nhé!");
                             exerciseSubtitle.innerText = "Tuyệt vời! Bạn đã hoàn thành bài tập.";
-                            mainControls.style.display = 'none';
-                            btnBackToWork.style.display = 'block'; 
-                            addTimeContainer.style.display = 'none';
+                            mainControls.style.display = 'none'; btnBackToWork.style.display = 'block'; addTimeContainer.style.display = 'none';
                         }
                     }
                 }, 1000);
@@ -572,24 +489,14 @@
         }
 
         function returnToWork() {
-            currentMode = 'WORK';
-            currentTotalTime = WORK_TIME;
-            timeRemaining = WORK_TIME;
-            startBtn.innerText = "Bắt Đầu";
-            localStorage.setItem('pt_timer_time', timeRemaining);
-            localStorage.setItem('pt_timer_mode', 'WORK');
-            updateUI();
+            currentMode = 'WORK'; currentTotalTime = WORK_TIME; timeRemaining = WORK_TIME;
+            startBtn.innerText = "Bắt Đầu"; localStorage.setItem('pt_timer_time', timeRemaining); localStorage.setItem('pt_timer_mode', 'WORK');
+            updateUI(); toggleTimer(); 
         }
 
         function resetTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            startBtn.innerText = "Bắt Đầu";
-            currentMode = 'WORK';
-            currentTotalTime = WORK_TIME;
-            timeRemaining = WORK_TIME;
-            localStorage.setItem('pt_timer_time', timeRemaining);
-            localStorage.setItem('pt_timer_mode', 'WORK');
+            clearInterval(timerInterval); isRunning = false; startBtn.innerText = "Bắt Đầu"; currentMode = 'WORK';
+            currentTotalTime = WORK_TIME; timeRemaining = WORK_TIME; localStorage.setItem('pt_timer_time', timeRemaining); localStorage.setItem('pt_timer_mode', 'WORK');
             updateUI();
         }
 
