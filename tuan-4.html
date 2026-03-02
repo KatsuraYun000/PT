@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tuần 4 - Trợ Lý Cột Sống</title>
+    <style>
+        :root { --blue-light: #eff6ff; --blue-primary: #2563eb; --blue-dark: #1e3a8a; --text-main: #334155; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-main); background-color: #f8fafc; }
+
+        header { background-color: white; padding: 20px 5%; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .btn-back { text-decoration: none; color: var(--blue-dark); font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; background-color: var(--blue-light); transition: 0.3s; }
+        .btn-back:hover { background-color: #dbeafe; transform: translateX(-5px); }
+
+        .page-title { text-align: center; padding: 50px 20px 30px; }
+        .page-title h1 { color: var(--blue-dark); font-size: 32px; margin-bottom: 10px; }
+        .page-title p { font-size: 18px; color: #64748b; max-width: 600px; margin: 0 auto; }
+
+        .schedule-container { max-width: 900px; margin: 0 auto 80px; padding: 0 20px; }
+        .day-group { background-color: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.05); border-left: 6px solid var(--blue-primary); transition: 0.3s; }
+        .day-group:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(37, 99, 235, 0.1); }
+        .day-title { color: var(--blue-dark); font-size: 24px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; }
+        
+        .time-block { margin-bottom: 25px; }
+        .time-block:last-child { margin-bottom: 0; }
+        .time-label { display: inline-block; background-color: var(--blue-light); color: var(--blue-primary); font-weight: bold; padding: 5px 15px; border-radius: 20px; margin-bottom: 10px; }
+        
+        .task-list { list-style: none; }
+        .task-list > li { position: relative; padding-left: 25px; margin-bottom: 15px; font-size: 16px; line-height: 1.6; }
+        .task-list > li::before { content: "🔹"; position: absolute; left: 0; color: var(--blue-primary); }
+        
+        .sub-list { list-style-type: disc; margin-top: 5px; margin-left: 20px; color: #475569; }
+        .sub-list li { margin-bottom: 5px; }
+
+        .fade-in { opacity: 0; transform: translateY(30px); transition: 0.6s ease-out; }
+        .fade-in.show { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="btn-back"><span>&#8592;</span> Quay lại Trang chủ</a>
+    </header>
+
+    <div class="page-title fade-in">
+        <h1>Tuần 4: Duy trì hoạt động</h1>
+        <p>Mục tiêu: Hình thành thói quen vận động vô thức, duy trì tư thế đúng và ngăn ngừa cơn đau tái phát.</p>
+    </div>
+
+    <div class="schedule-container">
+        <div class="day-group fade-in">
+            <h2 class="day-title">🗓️ Lịch tập: Thứ 2 / Thứ 4 / Thứ 6</h2>
+            
+            <div class="time-block">
+                <div class="time-label">🌅 Buổi Sáng</div>
+                <ul class="task-list">
+                    <li>
+                        <strong>Bài tập ấn cằm (Chin Tuck):</strong>
+                        <ul class="sub-list">
+                            <li>Thực hiện: Đứng hoặc ngồi thẳng lưng tựa vào tường.</li>
+                            <li>Chuyển động: Từ từ thu cằm vào trong sao cho phần sau cổ được kéo dài ra và chạm sát vào tường. Đây là bài tập di động đốt sống cổ rất tốt để chỉnh tư thế đầu hướng ra trước.</li>
+                        </ul>
+                    </li>
+                    <li>Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)</li>
+                    <li>Đứng lên nâng cao đùi (30 lần).</li>
+                </ul>
+            </div>
+
+            <div class="time-block">
+                <div class="time-label">☀️ Buổi Chiều</div>
+                <ul class="task-list">
+                    <li>Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)</li>
+                    <li>Đứng lên gót chạm mông (30 lần).</li>
+                </ul>
+            </div>
+
+            <div class="time-block">
+                <div class="time-label">🌙 Buổi Tối</div>
+                <ul class="task-list">
+                    <li>Plank: Chống hai khuỷu tay và mũi chân xuống sàn, giữ người thành một đường thẳng từ đầu đến gót chân.</li>
+                    <li>Plank nghiêng: Nằm nghiêng, chống khuỷu tay xuống sàn ngay dưới vai. Nâng hông lên sao cho cơ thể thành một đường thẳng.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="day-group fade-in">
+            <h2 class="day-title">🗓️ Lịch tập: Thứ 3 / Thứ 5 / Thứ 7</h2>
+            
+            <div class="time-block">
+                <div class="time-label">🌅 Buổi Sáng</div>
+                <ul class="task-list">
+                    <li>Bài tập Y-W (Y-W Raises): Nằm sấp hoặc đứng cúi người. Giơ hai tay tạo thành chữ Y, sau đó kéo khuỷu tay xuống sườn để tạo thành chữ W, ép chặt hai bả vai vào nhau.</li>
+                    <li>Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)</li>
+                    <li>Đứng lên gót chạm mông (30 lần).</li>
+                </ul>
+            </div>
+
+            <div class="time-block">
+                <div class="time-label">☀️ Buổi Chiều</div>
+                <ul class="task-list">
+                    <li>Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...)</li>
+                    <li>
+                        <strong>Bài tập ấn cằm (Chin Tuck):</strong>
+                        <ul class="sub-list">
+                            <li>Thực hiện: Đứng hoặc ngồi thẳng lưng tựa vào tường.</li>
+                            <li>Chuyển động: Từ từ thu cằm vào trong sao cho phần sau cổ được kéo dài ra và chạm sát vào tường. Đây là bài tập di động đốt sống cổ rất tốt để chỉnh tư thế đầu hướng ra trước.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="time-block">
+                <div class="time-label">🌙 Buổi Tối</div>
+                <ul class="task-list">
+                    <li>Con bọ chết (Dead bug): Nằm ngửa, giơ hai tay lên trời, co hai chân vuông góc (tư thế cái bàn).</li>
+                    <li>Con chim chó (Bird Dog): Chống hai tay và hai đầu gối xuống sàn (tư thế bốn chân). Duỗi tay trái về phía trước và chân phải về phía sau. Giữ cơ thể thăng bằng, không để hông bị nghiêng.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('show'); } });
+        });
+        const hiddenElements = document.querySelectorAll('.fade-in');
+        hiddenElements.forEach((el) => observer.observe(el));
+    </script>
+</body>
+</html>
