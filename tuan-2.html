@@ -3,65 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Tuần 2 - Trợ Lý Cột Sống</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --blue-light: #eff6ff; --blue-primary: #2563eb; --blue-dark: #1e3a8a; --text-main: #334155; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-main); background-color: #f8fafc; }
+        :root { 
+            --bg-body: #f8fafc; --bg-card: #ffffff; 
+            --blue-light: #eff6ff; --blue-primary: #2563eb; --blue-dark: #1e3a8a; 
+            --text-main: #334155; --text-muted: #64748b; 
+            --border-color: #e2e8f0; --bg-img: #f1f5f9;
+        }
 
-        header { background-color: white; padding: 20px 5%; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; align-items: center; position: sticky; top: 0; z-index: 100; }
+        body.dark-mode {
+            --bg-body: #0f172a; --bg-card: #1e293b; 
+            --blue-light: #1e293b; --blue-primary: #38bdf8; --blue-dark: #bae6fd; 
+            --text-main: #f1f5f9; --text-muted: #94a3b8; 
+            --border-color: #334155; --bg-img: #0f172a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; color: var(--text-main); background-color: var(--bg-body); transition: 0.3s; }
+
+        header { background-color: var(--bg-card); padding: 20px 5%; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); transition: 0.3s;}
         .btn-back { text-decoration: none; color: var(--blue-dark); font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; background-color: var(--blue-light); transition: 0.3s; }
-        .btn-back:hover { background-color: #dbeafe; transform: translateX(-5px); }
+        .btn-back:hover { filter: brightness(0.95); transform: translateX(-5px); }
+        .btn-icon-tool { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-main); margin-left: auto; transition: 0.3s;}
 
         .page-title { text-align: center; padding: 50px 20px 30px; }
         .page-title h1 { color: var(--blue-dark); font-size: 32px; margin-bottom: 10px; }
-        .page-title p { font-size: 18px; color: #64748b; max-width: 600px; margin: 0 auto; }
+        .page-title p { font-size: 18px; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
 
         .schedule-container { max-width: 900px; margin: 0 auto 80px; padding: 0 20px; }
-        .day-group { background-color: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.05); border-top: 6px solid var(--blue-primary); }
-        .day-title { color: var(--blue-dark); font-size: 24px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; }
+        .day-group { background-color: var(--bg-card); border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); border-top: 6px solid var(--blue-primary); border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); transition: 0.3s;}
+        .day-title { color: var(--blue-dark); font-size: 24px; border-bottom: 2px dashed var(--border-color); padding-bottom: 15px; margin-bottom: 20px; }
         
         .time-label { display: inline-block; background-color: var(--blue-light); color: var(--blue-primary); font-weight: bold; padding: 5px 15px; border-radius: 20px; margin-bottom: 15px; }
         
-        /* CẤU TRÚC MỚI: BÀI TẬP CÓ HÌNH ẢNH MINH HỌA */
         .exercise-item {
-            display: flex;
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            transition: 0.3s;
+            display: flex; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: 0.3s;
         }
-        .exercise-item:hover { box-shadow: 0 10px 15px rgba(37, 99, 235, 0.1); transform: translateY(-3px); }
+        .exercise-item:hover { box-shadow: 0 10px 15px rgba(37, 99, 235, 0.1); transform: translateY(-3px); border-color: var(--blue-primary); }
         
-        /* Khung chứa ảnh */
-        .exercise-img {
-            width: 200px;
-            min-width: 200px;
-            background-color: #f1f5f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .exercise-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .exercise-img { width: 200px; min-width: 200px; background-color: var(--bg-img); display: flex; align-items: center; justify-content: center; }
+        .exercise-img img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Khung chứa nội dung chữ */
         .exercise-content { padding: 20px; flex: 1; }
         .exercise-name { color: var(--blue-dark); font-size: 18px; margin-bottom: 10px; }
         
-        .sub-list { list-style-type: none; margin-left: 0; color: #475569; font-size: 15px; line-height: 1.6;}
+        .sub-list { list-style-type: none; margin-left: 0; color: var(--text-muted); font-size: 15px; line-height: 1.6;}
         .sub-list li { position: relative; padding-left: 20px; margin-bottom: 6px; }
         .sub-list li::before { content: "✓"; position: absolute; left: 0; color: #10b981; font-weight: bold; }
 
         .fade-in { opacity: 0; transform: translateY(30px); transition: 0.6s ease-out; }
         .fade-in.show { opacity: 1; transform: translateY(0); }
 
-        /* Chỉnh lại cho điện thoại màn hình nhỏ */
         @media (max-width: 600px) {
             .exercise-item { flex-direction: column; }
             .exercise-img { width: 100%; height: 200px; }
@@ -72,6 +67,7 @@
 
     <header>
         <a href="index.html" class="btn-back"><span>&#8592;</span> Quay lại</a>
+        <button class="btn-icon-tool" id="darkModeToggle" onclick="toggleDarkMode()" title="Chế độ Sáng/Tối">🌙</button>
     </header>
 
     <div class="page-title fade-in">
@@ -96,7 +92,7 @@
                         <li>Ngồi thẳng, bám tay không kéo vào mép ghế để cố định vai.</li>
                         <li>Nghiêng đầu sang bên đối diện (tai hướng về vai).</li>
                         <li>Dùng tay còn lại ấn nhẹ đầu xuống để tăng độ căng. Không kéo giật mạnh.</li>
-                        <li><strong>Giữ 60 giây / Lặp lại 5 lần mỗi bên.</strong></li>
+                        <li><strong style="color: var(--text-main);">Giữ 60 giây / Lặp lại 5 lần mỗi bên.</strong></li>
                     </ul>
                 </div>
             </div>
@@ -113,7 +109,7 @@
                         <li>Xoay đầu sang một bên khoảng 45 độ.</li>
                         <li>Cúi đầu xuống như thể đang nhìn vào nách của mình.</li>
                         <li>Dùng tay cùng phía ấn nhẹ đầu xuống.</li>
-                        <li><strong>Giữ 60 giây / Lặp lại 5 lần mỗi bên.</strong></li>
+                        <li><strong style="color: var(--text-main);">Giữ 60 giây / Lặp lại 5 lần mỗi bên.</strong></li>
                     </ul>
                 </div>
             </div>
@@ -130,7 +126,7 @@
                         <li>Chống hai tay và hai gối xuống sàn, lưng thẳng.</li>
                         <li>Hít vào: Võng lưng xuống, ngẩng đầu nhìn lên (Con bò).</li>
                         <li>Thở ra: Cong lưng lên cao, cúi đầu nhìn xuống rốn (Con mèo).</li>
-                        <li><strong>Lặp lại chậm rãi 5 – 10 lần.</strong></li>
+                        <li><strong style="color: var(--text-main);">Lặp lại chậm rãi 5 – 10 lần.</strong></li>
                     </ul>
                 </div>
             </div>
@@ -144,7 +140,7 @@
                     <ul class="sub-list">
                         <li>Ngồi trên giường, duỗi thẳng chân.</li>
                         <li>Vươn tay chạm tới ngón chân đến khi thấy vừa căng.</li>
-                        <li><strong>Giữ 60 giây / Lặp lại 5 lần.</strong></li>
+                        <li><strong style="color: var(--text-main);">Giữ 60 giây / Lặp lại 5 lần.</strong></li>
                     </ul>
                 </div>
             </div>
@@ -153,6 +149,17 @@
     </div>
 
     <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('pt_dark_mode', isDark ? 'enabled' : 'disabled');
+            document.getElementById('darkModeToggle').innerText = isDark ? '☀️' : '🌙';
+        }
+        if (localStorage.getItem('pt_dark_mode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').innerText = '☀️';
+        }
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('show'); } });
         });
