@@ -6,7 +6,7 @@
     <title>Trợ Lý Vận Động - Xóa Bỏ Cơn Đau Chốn Công Sở</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         /* HỆ THỐNG BIẾN MÀU SÁNG/TỐI TỰ ĐỘNG */
@@ -38,69 +38,86 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         
-        /* Đồng bộ Font chữ toàn web */
-        body { font-family: 'Inter', sans-serif; color: var(--text-main); background-color: var(--bg-body); overflow-x: hidden; line-height: 1.6; transition: 0.3s; }
+        /* CẬP NHẬT FONT MONTSERRAT - NỚI LỎNG DÒNG */
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            color: var(--text-main); 
+            background-color: var(--bg-body); 
+            overflow-x: hidden; 
+            line-height: 1.7; /* Đã tăng khoảng cách dòng cho dễ đọc */
+            font-size: 18px; /* Tăng size nền tảng */
+            transition: 0.3s; 
+        }
 
-        /* THANH ĐIỀU HƯỚNG */
-        nav { position: fixed; top: 0; width: 100%; background-color: var(--bg-nav); backdrop-filter: blur(10px); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 1px 5px rgba(0,0,0,0.05); transition: 0.3s;}
-        .nav-brand { font-weight: 800; font-size: 22px; color: var(--blue-primary); display: flex; align-items: center; gap: 8px;}
+        button, input, select, textarea {
+            font-family: inherit; 
+        }
+
+        /* THANH ĐIỀU HƯỚNG - PHÓNG TO CHỮ & NÚT */
+        nav { position: fixed; top: 0; width: 100%; background-color: var(--bg-nav); backdrop-filter: blur(10px); padding: 18px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 1px 5px rgba(0,0,0,0.05); transition: 0.3s;}
+        .nav-brand { font-weight: 800; font-size: 26px; color: var(--blue-primary); display: flex; align-items: center; gap: 8px;}
         .nav-links { display: flex; align-items: center; }
-        .nav-links a { color: var(--text-main); text-decoration: none; margin-left: 25px; font-weight: 600; transition: 0.3s; font-size: 15px;}
+        .nav-links a { color: var(--text-main); text-decoration: none; margin-left: 30px; font-weight: 600; transition: 0.3s; font-size: 17px;}
         .nav-links a:hover { color: var(--blue-primary); }
-        .btn-nav-cta { background-color: var(--blue-primary); color: white !important; padding: 10px 25px; border-radius: 50px; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3); }
+        .btn-nav-cta { background-color: var(--blue-primary); color: white !important; padding: 12px 28px; border-radius: 50px; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3); font-size: 16px;}
         .btn-nav-cta:hover { filter: brightness(1.1); transform: translateY(-2px); }
-        .btn-icon-tool { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-main); margin-left: 25px;}
+        .btn-icon-tool { background: transparent; border: none; font-size: 22px; cursor: pointer; color: var(--text-main); margin-left: 25px;}
 
-        /* HERO SECTION */
-        #gioi-thieu { padding: 140px 5% 100px; min-height: 95vh; display: flex; align-items: center; background: radial-gradient(circle at top left, var(--bg-card), var(--bg-body)); overflow: hidden; }
+        /* HERO SECTION - TĂNG ĐỘ HOÀNH TRÁNG CỦA TIÊU ĐỀ */
+        #gioi-thieu { padding: 150px 5% 100px; min-height: 95vh; display: flex; align-items: center; background: radial-gradient(circle at top left, var(--bg-card), var(--bg-body)); overflow: hidden; }
         .container { max-width: 1200px; margin: 0 auto; width: 100%; position: relative; }
         .row { display: flex; align-items: center; }
         .col-text { flex: 1; padding-right: 50px; z-index: 2; } 
         .col-image { flex: 1.2; height: 600px; position: relative; transform: translateX(50px); }
-        h1 { color: var(--text-main); font-size: 48px; margin-bottom: 25px; line-height: 1.15; font-weight: 900;}
-        .intro-text { font-size: 18px; color: var(--text-muted); margin-bottom: 30px; text-align: justify; max-width: 550px;}
+        
+        h1 { color: var(--text-main); font-size: 56px; margin-bottom: 25px; line-height: 1.2; font-weight: 900;} /* Tăng từ 48 lên 56 */
+        .intro-text { font-size: 20px; color: var(--text-muted); margin-bottom: 30px; text-align: justify; max-width: 580px;} /* Tăng từ 18 lên 20 */
+        
         .hero-image-container { width: 100%; height: 100%; -webkit-mask-image: linear-gradient(to left, black 40%, transparent 100%); mask-image: linear-gradient(to left, black 40%, transparent 100%); }
         .hero-image { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; border-radius: 20px;}
-        .btn-primary { display: inline-block; background-color: var(--blue-primary); color: white; padding: 18px 40px; border-radius: 50px; font-size: 18px; font-weight: bold; text-decoration: none; box-shadow: 0 10px 25px rgba(14, 165, 233, 0.4); transition: 0.3s; border: none; cursor: pointer;}
+        
+        .btn-primary { display: inline-block; background-color: var(--blue-primary); color: white; padding: 20px 45px; border-radius: 50px; font-size: 20px; font-weight: bold; text-decoration: none; box-shadow: 0 10px 25px rgba(14, 165, 233, 0.4); transition: 0.3s; border: none; cursor: pointer;}
         .btn-primary:hover { filter: brightness(1.1); transform: translateY(-3px); box-shadow: 0 15px 30px rgba(14, 165, 233, 0.5); }
 
-        /* LỊCH TRÌNH */
+        /* LỊCH TRÌNH - CHỈNH LẠI CÁC THẺ BÀI TẬP TO HƠN */
         section { padding: 100px 5%; }
-        .section-header { text-align: center; max-width: 700px; margin: 0 auto 60px; }
-        .section-title { color: var(--text-main); font-size: 36px; margin-bottom: 15px; font-weight: 800; }
-        .section-desc { font-size: 18px; color: var(--text-muted); }
+        .section-header { text-align: center; max-width: 750px; margin: 0 auto 60px; }
+        .section-title { color: var(--text-main); font-size: 42px; margin-bottom: 15px; font-weight: 800; }
+        .section-desc { font-size: 20px; color: var(--text-muted); }
         #lich-trinh { background-color: var(--bg-card); }
-        .schedule-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 1000px; margin: 0 auto; }
+        .schedule-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; max-width: 1050px; margin: 0 auto; }
+        
         .week-card { background: var(--bg-card); border-radius: 25px; overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid var(--border-color); display: flex; flex-direction: column; }
         .week-card:hover { transform: translateY(-10px); border-color: var(--blue-primary);}
-        .week-img { width: 100%; height: 220px; object-fit: cover; }
-        .week-content { padding: 30px; flex-grow: 1; display: flex; flex-direction: column; }
-        .week-tag { align-self: flex-start; background-color: var(--blue-light-accent); color: var(--blue-primary); padding: 6px 15px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 15px; }
-        .week-title { font-size: 22px; color: var(--text-main); margin-bottom: 15px; font-weight: 700; }
-        .week-details { font-size: 16px; color: var(--text-muted); margin-bottom: 25px; flex-grow: 1; }
-        .btn-detail { text-align: center; background-color: transparent; color: var(--blue-primary); padding: 12px; border-radius: 15px; text-decoration: none; font-weight: bold; border: 2px solid var(--border-color); transition: 0.3s; }
+        .week-img { width: 100%; height: 250px; object-fit: cover; }
+        .week-content { padding: 35px; flex-grow: 1; display: flex; flex-direction: column; }
+        
+        .week-tag { align-self: flex-start; background-color: var(--blue-light-accent); color: var(--blue-primary); padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: bold; margin-bottom: 15px; }
+        .week-title { font-size: 26px; color: var(--text-main); margin-bottom: 15px; font-weight: 700; }
+        .week-details { font-size: 17px; color: var(--text-muted); margin-bottom: 30px; flex-grow: 1; }
+        .btn-detail { text-align: center; background-color: transparent; color: var(--blue-primary); padding: 15px; border-radius: 15px; text-decoration: none; font-weight: bold; border: 2px solid var(--border-color); transition: 0.3s; font-size: 16px;}
         .btn-detail:hover { background-color: var(--blue-primary); color: white; border-color: var(--blue-primary); }
 
         /* KIẾN THỨC & ĐÁNH GIÁ */
         #kien-thuc { background-color: var(--bg-body); text-align: center; }
         #khao-sat { background-color: var(--bg-card); text-align: center; }
-        .placeholder-box { background: var(--bg-card); padding: 50px; border-radius: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.05); max-width: 700px; margin: 0 auto; border: 3px dashed var(--border-color); }
-        .placeholder-title { font-size: 24px; margin-bottom: 15px; font-weight: 700;}
+        .placeholder-box { background: var(--bg-card); padding: 60px 40px; border-radius: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.05); max-width: 750px; margin: 0 auto; border: 3px dashed var(--border-color); }
+        .placeholder-title { font-size: 28px; margin-bottom: 15px; font-weight: 700;}
 
-        /* CTA CUỐI TRANG */
-        .cta-container { text-align: center; padding: 100px 5%; background: linear-gradient(135deg, var(--blue-dark), var(--blue-primary)); color: white; }
-        .cta-container h2 { font-size: 38px; margin-bottom: 20px; font-weight: 800; color: white;}
-        .cta-container p { font-size: 20px; color: #e0f2fe; margin-bottom: 40px; }
-        .btn-start-huge { display: inline-block; background-color: white; color: var(--blue-primary); padding: 20px 50px; border-radius: 50px; font-size: 22px; font-weight: 800; text-decoration: none; text-transform: uppercase; box-shadow: 0 20px 40px rgba(0,0,0,0.2); transition: 0.3s; }
+        /* CTA CUỐI TRANG - NÚT SIÊU TO */
+        .cta-container { text-align: center; padding: 120px 5%; background: linear-gradient(135deg, var(--blue-dark), var(--blue-primary)); color: white; }
+        .cta-container h2 { font-size: 42px; margin-bottom: 20px; font-weight: 800; color: white;}
+        .cta-container p { font-size: 22px; color: #e0f2fe; margin-bottom: 50px; }
+        .btn-start-huge { display: inline-block; background-color: white; color: var(--blue-primary); padding: 22px 55px; border-radius: 50px; font-size: 24px; font-weight: 800; text-decoration: none; text-transform: uppercase; box-shadow: 0 20px 40px rgba(0,0,0,0.2); transition: 0.3s; }
         .btn-start-huge:hover { transform: translateY(-5px); box-shadow: 0 25px 50px rgba(0,0,0,0.3); color: var(--blue-dark); }
 
         @media (max-width: 900px) {
             .row { flex-direction: column; text-align: center; }
             .col-text { padding-right: 0; margin-bottom: 50px; }
-            .intro-text { margin: 0 auto 30px; }
+            .intro-text { margin: 0 auto 30px; font-size: 18px;}
             .col-image { transform: none; height: 400px; width: 100%; }
             .hero-image-container { -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%); mask-image: linear-gradient(to bottom, black 50%, transparent 100%); }
-            h1 { font-size: 36px; }
+            h1 { font-size: 42px; }
             .nav-links { display: none; }
             .schedule-grid { grid-template-columns: 1fr; }
         }
@@ -109,7 +126,7 @@
 <body>
 
     <nav>
-        <div class="nav-brand">MoveAssist 🛡️</div>
+        <div class="nav-brand">Move Assist </div>
         <div class="nav-links">
             <a href="#gioi-thieu">Giới thiệu</a>
             <a href="#lich-trinh">Lộ trình</a>
@@ -124,9 +141,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-text fade-in">
-                    <h1>Đánh Thức Cơ Thể Nơi Công Sở – Làm Việc Hiệu Quả, Tạm Biệt Cơn Đau</h1>
+                    <h1>Đánh Thức Cơ Thể - Làm Việc Hiệu Quả - Tạm Biệt Cơn Đau</h1>
                     <p class="intro-text">Chúng ta dành 8 tiếng mỗi ngày "đóng băng" trên ghế, khiến cơ thể kêu cứu bằng những cơn đau mỏi vai gáy dai dẳng. Bạn biết mình cần vận động, nhưng công việc cuốn đi khiến bạn quên mất.</p>
-                    <p class="intro-text">Website này không chỉ là một chiếc đồng hồ nhắc nhở vô tri. Đây là một <strong>Trợ lý Vận động Kỹ thuật số</strong>, cung cấp cho bạn một phác đồ khoa học 4 tuần để chủ động phá vỡ thói quen ngồi lỳ, tái tạo năng lượng ngay tại bàn làm việc mà không làm gián đoạn dòng chảy công việc của bạn.</p>
+                    <p class="intro-text">Website này không chỉ là một chiếc đồng hồ nhắc nhở vô tri. Đây là một <strong>Trợ lý Vận động </strong>, cung cấp cho bạn một kế hoạch tập luyện khoa học 4 tuần để chủ động phá vỡ thói quen ngồi lỳ, tái tạo năng lượng ngay tại bàn làm việc mà không làm gián đoạn dòng chảy công việc của bạn.</p>
                     <a href="timer.html" class="btn-primary">Bắt đầu ngay ➔</a>
                 </div>
                 <div class="col-image fade-in">
@@ -141,11 +158,11 @@
     <section id="lich-trinh">
         <div class="section-header fade-in">
             <h2 class="section-title">Danh sách bài tập 4 tuần</h2>
-            <p class="section-desc">Lộ trình tăng tiến khoa học, được thiết kế chuyên biệt cho môi trường văn phòng.</p>
+            <p class="section-desc">Chương trình tập luyện tăng tiến khoa học, được thiết kế chuyên biệt cho môi trường văn phòng.</p>
         </div>
         <div class="schedule-grid">
             <div class="week-card fade-in">
-                <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="week-img">
+                <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tuần 1" class="week-img">
                 <div class="week-content">
                     <span class="week-tag">Tuần 1</span>
                     <h3 class="week-title">Nhận thức & Làm quen</h3>
@@ -154,7 +171,7 @@
                 </div>
             </div>
             <div class="week-card fade-in">
-                <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="week-img">
+                <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tuần 2" class="week-img">
                 <div class="week-content">
                     <span class="week-tag">Tuần 2</span>
                     <h3 class="week-title">Giảm đau & Kéo giãn</h3>
@@ -163,7 +180,7 @@
                 </div>
             </div>
             <div class="week-card fade-in">
-                <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="week-img">
+                <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tuần 3" class="week-img">
                 <div class="week-content">
                     <span class="week-tag">Tuần 3</span>
                     <h3 class="week-title">Tăng cường sức mạnh</h3>
@@ -172,7 +189,7 @@
                 </div>
             </div>
             <div class="week-card fade-in">
-                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="week-img">
+                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tuần 4" class="week-img">
                 <div class="week-content">
                     <span class="week-tag">Tuần 4</span>
                     <h3 class="week-title">Duy trì & Cố định</h3>
@@ -185,32 +202,32 @@
 
     <section id="kien-thuc">
         <div class="section-header fade-in">
-            <h2 class="section-title">Góc Kiến thức</h2>
+            <h2 class="section-title">Góc Kiến Thức</h2>
             <p class="section-desc">Hiểu đúng về cơ thể để bảo vệ bản thân tốt hơn.</p>
         </div>
         <div class="placeholder-box fade-in" style="border-color: var(--blue-primary);">
-            <h3 class="placeholder-title" style="color: var(--blue-primary);">📚 Cẩm nang y khoa văn phòng</h3>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Quy tắc 3 góc 90 độ, Hội chứng mông chết, Tại sao đĩa đệm lại khát nước?</p>
-            <a href="kien-thuc.html" class="btn-primary" style="padding: 12px 30px; font-size: 16px;">Đọc cẩm nang ngay</a>
+            <h3 class="placeholder-title" style="color: var(--blue-primary);">📚 Cẩm nang sức khỏe văn phòng</h3>
+            <p style="color: var(--text-muted); margin-bottom: 25px; font-size: 18px;">Quy tắc 3 góc 90 độ, Hội chứng mông chết,...</p>
+            <a href="kien-thuc.html" class="btn-primary" style="padding: 15px 35px; font-size: 18px;">Đọc cẩm nang ngay!</a>
         </div>
     </section>
 
     <section id="khao-sat">
         <div class="section-header fade-in">
-            <h2 class="section-title">Đánh giá</h2>
-            <p class="section-desc">Kiểm tra định kỳ để thấy rõ hiệu quả của lộ trình.</p>
+            <h2 class="section-title">Đánh Giá</h2>
+            <p class="section-desc">Kiểm tra định kỳ để thấy rõ hiệu quả của việc tập luyện.</p>
         </div>
         <div class="placeholder-box fade-in" style="border-color: var(--orange-primary);">
             <h3 class="placeholder-title" style="color: var(--orange-primary);">📝 Hệ thống Sàng lọc Lâm sàng</h3>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Sử dụng thang đo y khoa Cornell (CMDQ) để phân tích mức độ an toàn và cá nhân hóa.</p>
-            <a href="danh-gia.html" class="btn-primary" style="background-color: var(--orange-primary); padding: 12px 30px; font-size: 16px;">Thực hiện Sàng lọc</a>
+            <p style="color: var(--text-muted); margin-bottom: 25px; font-size: 18px;">Sử dụng thang đo y khoa Cornell (CMDQ) để phân tích mức độ an toàn và cá nhân hóa.</p>
+            <a href="danh-gia.html" class="btn-primary" style="background-color: var(--orange-primary); padding: 15px 35px; font-size: 18px;">Thực hiện Sàng lọc</a>
         </div>
     </section>
 
     <div class="cta-container fade-in">
         <h2>Đã đến lúc phá vỡ sự thụ động!</h2>
-        <p>Hãy để MoveAssist đồng hành cùng bạn trong phiên làm việc tiếp theo.</p>
-        <a href="timer.html" class="btn-start-huge">BẮT ĐẦU NGAY HÔM NAY</a>
+        <p>Hãy để Move Assist đồng hành cùng bạn trong phiên làm việc tiếp theo.</p>
+        <a href="timer.html" class="btn-start-huge">BẮT ĐẦU NGAY HÔM NAY!</a>
     </div>
 
     <script>
@@ -236,7 +253,7 @@
             });
         });
         document.querySelectorAll('.fade-in').forEach((el) => {
-            el.style.opacity = 0; el.style.transform = 'translateY(30px)'; el.style.transition = '0.8s ease-out';
+            el.style.opacity = 0; el.style.transform = 'translateY(40px)'; el.style.transition = '0.8s ease-out';
             observer.observe(el);
         });
     </script>

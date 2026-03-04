@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sàng lọc & Đánh giá - Trợ Lý Vận Động</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         :root { 
@@ -27,63 +28,78 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* CẬP NHẬT FONT INTER */
-        body { font-family: 'Inter', sans-serif; color: var(--text-main); background-color: var(--bg-body); min-height: 100vh; transition: background-color 0.3s, color 0.3s; padding-bottom: 50px;}
+        /* CẬP NHẬT FONT MONTSERRAT & BÙ KÍCH THƯỚC */
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            color: var(--text-main); 
+            background-color: var(--bg-body); 
+            min-height: 100vh; 
+            transition: background-color 0.3s, color 0.3s; 
+            padding-bottom: 50px;
+            font-size: 17px; /* Tăng nền tảng lên 1px để không bị lọt thỏm */
+            line-height: 1.7;
+        }
+
+        /* Ép tất cả nút bấm và form nhập liệu dùng chung font Montserrat */
+        button, input, select, textarea {
+            font-family: inherit; 
+        }
 
         header { background: var(--bg-card); padding: 15px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); transition: 0.3s;}
-        .btn-back { text-decoration: none; color: var(--blue-primary); font-weight: bold; font-size: 16px; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-back { text-decoration: none; color: var(--blue-primary); font-weight: bold; font-size: 17px; display: inline-flex; align-items: center; gap: 8px; }
         .btn-back:hover { color: var(--blue-dark); }
         .btn-icon-tool { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-main); transition: 0.3s;}
 
         .eval-container { max-width: 800px; margin: 40px auto; padding: 0 5%; }
         .eval-header { text-align: center; margin-bottom: 40px; }
-        .eval-title { font-size: 32px; color: var(--blue-dark); margin-bottom: 10px; font-weight: 800; }
-        .eval-desc { font-size: 16px; color: var(--text-muted); }
+        .eval-title { font-size: 34px; color: var(--blue-dark); margin-bottom: 10px; font-weight: 800; } /* 32 -> 34px */
+        .eval-desc { font-size: 18px; color: var(--text-muted); } /* 16 -> 18px */
 
         .card { background: var(--bg-card); padding: 35px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color); margin-bottom: 30px; transition: 0.3s;}
-        .card-title { font-size: 20px; color: var(--text-main); margin-bottom: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px;}
-        .card-title .step-badge { background: var(--blue-light); color: var(--blue-primary); padding: 5px 12px; border-radius: 50px; font-size: 16px; font-weight: bold;}
+        .card-title { font-size: 22px; color: var(--text-main); margin-bottom: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px;} /* 20 -> 22px */
+        .card-title .step-badge { background: var(--blue-light); color: var(--blue-primary); padding: 5px 14px; border-radius: 50px; font-size: 16px; font-weight: 700;}
 
         /* RED FLAG SECTION */
         .red-flag-box { border-left: 5px solid var(--danger); background: var(--danger-light); padding: 20px; border-radius: 0 15px 15px 0; margin-bottom: 25px; transition: 0.3s;}
-        .red-flag-box h3 { color: var(--danger); margin-bottom: 10px; font-size: 18px; display: flex; align-items: center; gap: 8px;}
-        .question-row { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed var(--border-color); }
+        .red-flag-box h3 { color: var(--danger); margin-bottom: 10px; font-size: 19px; display: flex; align-items: center; gap: 8px;}
+        .question-row { margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px dashed var(--border-color); }
         .question-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
-        .question-text { font-size: 16px; font-weight: 600; margin-bottom: 12px; line-height: 1.5; color: var(--text-main);}
-        .radio-group-inline { display: flex; gap: 20px; }
-        .radio-btn-label { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; color: var(--text-muted); padding: 8px 20px; border: 2px solid var(--border-color); border-radius: 50px; transition: 0.2s;}
+        .question-text { font-size: 17px; font-weight: 600; margin-bottom: 12px; line-height: 1.6; color: var(--text-main);}
+        
+        .radio-group-inline { display: flex; gap: 20px; flex-wrap: wrap; } /* Thêm wrap để không rớt chữ trên ĐT */
+        .radio-btn-label { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 16px; cursor: pointer; color: var(--text-muted); padding: 10px 25px; border: 2px solid var(--border-color); border-radius: 50px; transition: 0.2s;}
         input[type="radio"] { display: none; }
         input[type="radio"]:checked + .radio-btn-label.yes-btn { background: var(--danger); border-color: var(--danger); color: white; }
         input[type="radio"]:checked + .radio-btn-label.no-btn { background: var(--success); border-color: var(--success); color: white; }
 
         /* ALERT BOX */
         #medicalAlert { display: none; text-align: center; padding: 40px 20px; animation: fadeIn 0.5s; }
-        #medicalAlert h2 { color: var(--danger); font-size: 28px; margin-bottom: 15px; }
+        #medicalAlert h2 { color: var(--danger); font-size: 28px; margin-bottom: 15px; font-weight: 800;}
         #medicalAlert p { font-size: 18px; line-height: 1.6; color: var(--text-main); margin-bottom: 20px;}
-        .btn-emergency { background: var(--danger); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 18px; display: inline-block; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);}
+        .btn-emergency { background: var(--danger); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 18px; display: inline-block; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);}
 
         /* CMDQ SECTION */
         #cmdqSection { display: none; animation: fadeIn 0.5s; }
-        .select-area { width: 100%; padding: 15px; font-size: 16px; border-radius: 12px; border: 2px solid var(--border-color); background: var(--bg-body); color: var(--text-main); margin-bottom: 25px; outline: none; font-weight: bold; transition: 0.3s;}
+        .select-area { width: 100%; padding: 16px; font-size: 17px; border-radius: 12px; border: 2px solid var(--border-color); background: var(--bg-body); color: var(--text-main); margin-bottom: 25px; outline: none; font-weight: 600; transition: 0.3s;}
         .select-area:focus { border-color: var(--blue-primary); }
         
-        .grid-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-        .grid-options label { display: block; padding: 15px; background: var(--bg-body); border: 2px solid var(--border-color); border-radius: 12px; text-align: center; font-weight: 600; cursor: pointer; transition: 0.2s; color: var(--text-muted);}
+        .grid-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .grid-options label { display: block; padding: 15px; background: var(--bg-body); border: 2px solid var(--border-color); border-radius: 12px; text-align: center; font-weight: 600; font-size: 16px; cursor: pointer; transition: 0.2s; color: var(--text-muted);}
         .grid-options input:checked + label { background: var(--blue-light); border-color: var(--blue-primary); color: var(--blue-primary); }
         .grid-options label:hover { border-color: var(--blue-primary); }
 
-        .btn-submit { width: 100%; padding: 18px; background: var(--blue-primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 20px; text-transform: uppercase;}
+        .btn-submit { width: 100%; padding: 18px; background: var(--blue-primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 20px; text-transform: uppercase; letter-spacing: 0.5px;}
         .btn-submit:hover { filter: brightness(1.1); transform: translateY(-3px); }
-        .btn-continue { width: 100%; padding: 18px; background: var(--success); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 10px;}
+        .btn-continue { width: 100%; padding: 18px; background: var(--success); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px;}
         .btn-continue:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
         /* RESULT SECTION */
         #resultSection { display: none; text-align: center; animation: fadeIn 0.5s; }
-        .result-badge { display: inline-block; padding: 10px 25px; border-radius: 50px; font-size: 20px; font-weight: 900; margin-bottom: 20px; color: white;}
+        .result-badge { display: inline-block; padding: 10px 25px; border-radius: 50px; font-size: 20px; font-weight: 800; margin-bottom: 20px; color: white;}
         .score-green { background: var(--success); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); }
         .score-yellow { background: var(--orange-primary); box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3); }
         .score-red { background: var(--danger); box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3); }
-        .result-advice { font-size: 18px; line-height: 1.6; text-align: justify; background: var(--bg-body); padding: 25px; border-radius: 15px; border: 1px solid var(--border-color); margin-bottom: 30px; transition: 0.3s;}
+        .result-advice { font-size: 18px; line-height: 1.7; text-align: justify; background: var(--bg-body); padding: 25px 30px; border-radius: 15px; border: 1px solid var(--border-color); margin-bottom: 30px; transition: 0.3s;}
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -98,14 +114,14 @@
     <div class="eval-container">
         <div class="eval-header">
             <h1 class="eval-title">Đánh Giá Phân Loại Lâm Sàng</h1>
-            <p class="eval-desc">Hệ thống phân tích dựa trên thang đo Cornell (CMDQ) để cá nhân hóa cường độ tập luyện của bạn.</p>
+            <p class="eval-desc">Hệ thống phân tích dựa trên thang đo y khoa Cornell (CMDQ) để cá nhân hóa cường độ tập luyện của bạn.</p>
         </div>
 
         <div id="redFlagSection" class="card">
             <div class="card-title"><span class="step-badge">Bước 1</span> Sàng lọc an toàn Y tế</div>
             <div class="red-flag-box">
                 <h3>🚨 Cảnh báo</h3>
-                <p style="font-size: 14px; color: var(--text-main);">Vui lòng trả lời trung thực để đảm bảo các bài tập trên hệ thống an toàn cho bạn.</p>
+                <p style="font-size: 15px; color: var(--text-main);">Vui lòng trả lời trung thực để đảm bảo các bài tập trên hệ thống an toàn cho bạn.</p>
             </div>
 
             <form id="redFlagForm">
@@ -146,7 +162,7 @@
         <div id="cmdqSection">
             <div class="card">
                 <div class="card-title"><span class="step-badge">Bước 2</span> Khảo sát chức năng (CMDQ)</div>
-                <p style="margin-bottom: 20px; color: var(--text-muted);">Hãy chọn <strong>MỘT</strong> vùng khiến bạn cảm thấy phiền toái nhất trong tuần qua để đánh giá:</p>
+                <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 17px;">Hãy chọn <strong>MỘT</strong> vùng khiến bạn cảm thấy phiền toái nhất trong tuần qua để đánh giá:</p>
                 
                 <select id="painArea" class="select-area">
                     <option value="Cổ vai gáy">Vùng Cổ & Vai gáy</option>
@@ -177,8 +193,8 @@
                     <div class="question-text">C. Cản trở: Tình trạng này có làm giảm hiệu suất làm việc của bạn không?</div>
                     <div class="grid-options">
                         <input type="radio" id="i1" name="intf" value="1" checked><label for="i1">Không cản trở gì</label>
-                        <input type="radio" id="i2" name="intf" value="2"><label for="i2">Gây mất tập trung nhẹ</label>
-                        <input type="radio" id="i3" name="intf" value="3"><label for="i3">Cản trở công việc đáng kể</label>
+                        <input type="radio" id="i2" name="intf" value="2"><label for="i2">Mất tập trung nhẹ</label>
+                        <input type="radio" id="i3" name="intf" value="3"><label for="i3">Cản trở đáng kể</label>
                     </div>
                 </div>
 
@@ -187,7 +203,7 @@
         </div>
 
         <div id="resultSection" class="card">
-            <h2 style="color: var(--blue-dark); margin-bottom: 20px;">BÁO CÁO PHÂN TÍCH TUẦN NÀY</h2>
+            <h2 style="color: var(--blue-dark); margin-bottom: 20px; font-weight: 800;">BÁO CÁO PHÂN TÍCH TUẦN NÀY</h2>
             <div id="resultBadge" class="result-badge score-green">Mức độ: NHẸ (Sinh lý bình thường)</div>
             
             <div class="result-advice" id="resultAdvice">
@@ -196,7 +212,7 @@
             </div>
 
             <a href="timer.html" class="btn-submit" style="display: block; text-align: center; text-decoration: none;">Đi tới Đồng hồ Vận động</a>
-            <button onclick="resetForm()" style="background: transparent; border: none; color: var(--text-muted); text-decoration: underline; margin-top: 20px; cursor: pointer; font-weight: bold;">Làm bài test lại</button>
+            <button onclick="resetForm()" style="background: transparent; border: none; color: var(--text-muted); text-decoration: underline; margin-top: 25px; cursor: pointer; font-weight: 700; font-size: 16px;">Làm bài test lại</button>
         </div>
 
     </div>
@@ -248,19 +264,16 @@
             const advice = document.getElementById('resultAdvice');
 
             if (totalScore <= 6) {
-                // Vùng Xanh (Nhẹ)
                 badge.className = "result-badge score-green";
                 badge.innerText = `Vùng ${area}: BÌNH THƯỜNG / NHẸ`;
                 advice.innerHTML = `Mức điểm rủi ro: <strong>${totalScore}/36</strong>.<br>Cơ thể bạn đang phản ứng hoàn toàn sinh lý với sự mệt mỏi do tư thế làm việc. Không có dấu hiệu chèn ép hay tổn thương.<br><br><strong>📌 Đề xuất:</strong> Duy trì Phác đồ Tuần 1 và Tuần 2. Khởi động Đồng hồ nhắc nhở (Interval 90 phút) để kích hoạt cơ bắp ngăn ngừa ức chế thần kinh cơ.`;
             } 
             else if (totalScore <= 18) {
-                // Vùng Vàng (Trung bình)
                 badge.className = "result-badge score-yellow";
                 badge.innerText = `Vùng ${area}: QUÁ TẢI TRUNG BÌNH`;
                 advice.innerHTML = `Mức điểm rủi ro: <strong>${totalScore}/36</strong>.<br>Hệ thống cơ bắp vùng ${area} của bạn đang bị quá tải tĩnh kéo dài, dẫn đến hiện tượng co thắt cơ bảo vệ và bắt đầu ảnh hưởng nhẹ đến năng suất làm việc.<br><br><strong>📌 Đề xuất:</strong><br>- Rút ngắn thời gian ngồi tĩnh xuống mức <strong>45-60 phút/lần</strong>.<br>- Tập trung vào các bài tập kéo giãn sâu (Phác đồ Tuần 2).<br>- Điều chỉnh lại độ cao màn hình và ghế ngồi (Xem Góc Kiến Thức).`;
             } 
             else {
-                // Vùng Cam/Đỏ (Nặng)
                 badge.className = "result-badge score-red";
                 badge.innerText = `Vùng ${area}: NGUY CƠ CAO`;
                 advice.innerHTML = `Mức điểm rủi ro: <strong>${totalScore}/36</strong>.<br>Tình trạng đau mỏi đang gây cản trở đáng kể đến chức năng sinh hoạt và làm việc. Mặc dù không có Cờ Đỏ, nhưng bạn đang đối diện với nguy cơ rối loạn cơ xương khớp mãn tính (MSDs).<br><br><strong>📌 Đề xuất:</strong><br>- Nên kết hợp chườm ấm thư giãn cơ vào buổi tối.<br>- Chuyển sang thực hành <strong>Phác đồ Tuần 3 (Tăng cường sức mạnh cơ lõi)</strong> để lấy lại sự ổn định cho các khớp.<br>- Nếu không thuyên giảm sau 1 tuần áp dụng, cần thăm khám chuyên khoa.`;
