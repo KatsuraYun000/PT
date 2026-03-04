@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        /* KHAI BÁO BIẾN MÀU CHO DARK MODE */
         :root { 
             --bg-body: #f8fafc; --bg-card: #ffffff;
             --blue-light: #eff6ff; --blue-primary: #2563eb; 
@@ -28,7 +27,6 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        /* CẬP NHẬT FONT INTER VÀ MÀU NỀN */
         body { 
             font-family: 'Inter', sans-serif; 
             color: var(--text-main); background-color: var(--bg-body); 
@@ -258,9 +256,11 @@
         let timerInterval = null;
         let isRunning = false;
         let dailyCount = 0;
-
         let currentVolume = 1; 
         let isMuted = false;
+        
+        // BIẾN QUẢN LÝ THỜI GIAN THỰC
+        let targetEndTime = null;
 
         const timeDisplay = document.getElementById('timeDisplay');
         const sessionTitle = document.getElementById('sessionTitle');
@@ -349,26 +349,6 @@
             document.getElementById('dailyStreakCount').innerText = `🔥 Hôm nay: ${dailyCount} bài`;
         }
 
-        function snoozeTimer() {
-            currentMode = 'WORK'; currentTotalTime = WORK_TIME; timeRemaining = 10 * 60; 
-            localStorage.setItem('pt_timer_time', timeRemaining); localStorage.setItem('pt_timer_mode', 'WORK');
-            showToast("Đã lùi 10 phút. Cột sống đang khóc đấy, ráng xong việc rồi tập nha! 🥲");
-            updateUI();
-            if(!isRunning) toggleTimer();
-        }
-
-        function addExerciseTime(seconds) {
-            if (currentMode !== 'EXERCISE') return;
-            timeRemaining += seconds; currentTotalTime += seconds;
-            updateUI(); showToast(`Đã cộng thêm ${seconds} giây. Cố lên! 💪`);
-        }
-
-        function addCustomExerciseTime() {
-            if (currentMode !== 'EXERCISE') return;
-            const sec = parseInt(document.getElementById('customAddSecInput').value);
-            if (sec > 0) addExerciseTime(sec);
-        }
-
         function updateUI() {
             let minutes = Math.floor(timeRemaining / 60); let seconds = timeRemaining % 60;
             let timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
@@ -417,6 +397,10 @@
         function selectExercise(index) {
             currentTaskObj = currentExerciseList[index]; currentExerciseDuration = currentTaskObj.duration;
             currentTotalTime = currentExerciseDuration; timeRemaining = currentExerciseDuration; currentMode = 'EXERCISE';
+            
+            localStorage.setItem('pt_timer_mode', 'EXERCISE');
+            localStorage.setItem('pt_total_time', currentTotalTime);
+            
             exerciseSubtitle.innerText = `Đang chọn: ${currentTaskObj.name}`; startBtn.innerText = "Bắt đầu tập";
             updateUI(); openDetailModal(); 
         }
@@ -439,8 +423,119 @@
 
         function saveWeek() { localStorage.setItem('pt_current_week', document.getElementById('weekSelect').value); }
 
+        // =========================================
+        // LÕI XỬ LÝ ĐỒNG HỒ DỰA TRÊN THỜI GIAN THỰC
+        // =========================================
+        function startInterval() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (!targetEndTime) return;
+                
+                // Lấy giờ đích trừ đi giờ hiện tại
+                timeRemaining = Math.ceil((targetEndTime - Date.now()) / 1000);
+                
+                if (timeRemaining <= 0) {
+                    timeRemaining = 0;
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    localStorage.setItem('pt_timer_state', 'STOPPED');
+                    handleTimerComplete();
+                } else {
+                    updateUI();
+                }
+            }, 1000);
+        }
+
+        function toggleTimer() {
+            requestNotificationPermission();
+            if (isRunning) {
+                // Tạm dừng
+                clearInterval(timerInterval); 
+                isRunning = false;
+                startBtn.innerText = "Tiếp tục"; 
+                localStorage.setItem('pt_timer_state', 'PAUSED');
+                localStorage.setItem('pt_timer_time', timeRemaining);
+                targetEndTime = null;
+                localStorage.removeItem('pt_end_time');
+            } else {
+                // Bắt đầu hoặc Tiếp tục
+                isRunning = true;
+                startBtn.innerText = "Tạm dừng"; 
+                
+                // Set mốc thời gian đích trong tương lai
+                targetEndTime = Date.now() + (timeRemaining * 1000);
+                localStorage.setItem('pt_end_time', targetEndTime);
+                localStorage.setItem('pt_timer_state', 'RUNNING');
+                localStorage.setItem('pt_timer_mode', currentMode);
+                localStorage.setItem('pt_total_time', currentTotalTime);
+                
+                startInterval();
+            }
+        }
+
+        function handleTimerComplete() {
+            playSound(); 
+            if (currentMode === 'WORK') {
+                currentMode = 'SELECT'; pushOSNotification("Đến giờ vận động rồi! 🚀", "Hãy đứng dậy vài phút để giải phóng cột sống của bạn nhé."); updateUI();
+            } else if (currentMode === 'EXERCISE') {
+                increaseStreak(); pushOSNotification("Tuyệt vời! 🎉", "Bạn đã hoàn thành bài tập. Tiếp tục giữ phong độ nhé!");
+                exerciseSubtitle.innerText = "Tuyệt vời! Bạn đã hoàn thành bài tập.";
+                mainControls.style.display = 'none'; btnBackToWork.style.display = 'block'; addTimeContainer.style.display = 'none';
+            }
+        }
+
+        function snoozeTimer() {
+            currentMode = 'WORK'; currentTotalTime = WORK_TIME; timeRemaining = 10 * 60; 
+            localStorage.setItem('pt_timer_mode', 'WORK');
+            localStorage.setItem('pt_total_time', currentTotalTime);
+            showToast("Đã lùi 10 phút. Cột sống đang khóc đấy, ráng xong việc rồi tập nha! 🥲");
+            
+            if(isRunning) {
+                targetEndTime = Date.now() + (timeRemaining * 1000);
+                localStorage.setItem('pt_end_time', targetEndTime);
+            } else {
+                localStorage.setItem('pt_timer_time', timeRemaining);
+                toggleTimer();
+            }
+            updateUI();
+        }
+
+        function addExerciseTime(seconds) {
+            if (currentMode !== 'EXERCISE') return;
+            timeRemaining += seconds; currentTotalTime += seconds;
+            
+            if(isRunning) {
+                targetEndTime += (seconds * 1000);
+                localStorage.setItem('pt_end_time', targetEndTime);
+            } else {
+                localStorage.setItem('pt_timer_time', timeRemaining);
+            }
+            
+            localStorage.setItem('pt_total_time', currentTotalTime);
+            updateUI(); showToast(`Đã cộng thêm ${seconds} giây. Cố lên! 💪`);
+        }
+
+        function returnToWork() {
+            currentMode = 'WORK'; currentTotalTime = WORK_TIME; timeRemaining = WORK_TIME;
+            startBtn.innerText = "Bắt Đầu"; 
+            localStorage.setItem('pt_timer_mode', 'WORK');
+            localStorage.setItem('pt_total_time', currentTotalTime);
+            updateUI(); toggleTimer(); 
+        }
+
+        function resetTimer() {
+            if(timerInterval) clearInterval(timerInterval); 
+            isRunning = false; startBtn.innerText = "Bắt Đầu"; currentMode = 'WORK';
+            currentTotalTime = WORK_TIME; timeRemaining = WORK_TIME; 
+            targetEndTime = null;
+            localStorage.setItem('pt_timer_time', timeRemaining); 
+            localStorage.setItem('pt_timer_mode', 'WORK');
+            localStorage.setItem('pt_total_time', currentTotalTime);
+            localStorage.setItem('pt_timer_state', 'STOPPED');
+            updateUI();
+        }
+
         function loadFromLocalStorage() {
-            // Load state Dark Mode cho timer
             if (localStorage.getItem('pt_dark_mode') === 'enabled') {
                 document.body.classList.add('dark-mode');
                 document.getElementById('darkModeToggle').innerText = '☀️';
@@ -448,66 +543,62 @@
 
             const savedVolume = localStorage.getItem('pt_volume');
             if (savedVolume !== null) {
-                currentVolume = parseFloat(savedVolume);
-                volumeSlider.value = currentVolume;
-                alarmSound.volume = currentVolume;
-                if (currentVolume === 0) {
-                    isMuted = true; document.getElementById('btnMute').innerText = "🔇";
-                } else {
-                    document.getElementById('btnMute').innerText = currentVolume < 0.5 ? "🔉" : "🔊";
-                }
+                currentVolume = parseFloat(savedVolume); volumeSlider.value = currentVolume; alarmSound.volume = currentVolume;
+                if (currentVolume === 0) { isMuted = true; document.getElementById('btnMute').innerText = "🔇"; } 
+                else { document.getElementById('btnMute').innerText = currentVolume < 0.5 ? "🔉" : "🔊"; }
             }
 
             const customWork = localStorage.getItem('pt_custom_work');
             if (customWork) { WORK_TIME = parseInt(customWork); workMinInput.value = WORK_TIME / 60; }
-
-            const savedMode = localStorage.getItem('pt_timer_mode');
-            const savedTime = localStorage.getItem('pt_timer_time');
-            if (savedMode === 'WORK' && savedTime !== null) { currentMode = 'WORK'; currentTotalTime = WORK_TIME; timeRemaining = parseInt(savedTime); } 
-            else { currentMode = 'WORK'; currentTotalTime = WORK_TIME; timeRemaining = WORK_TIME; }
-
+            
             const savedWeek = localStorage.getItem('pt_current_week');
             if (savedWeek) document.getElementById('weekSelect').value = savedWeek;
+            
+            // Lấy lại State cũ để xử lý thời gian thực
+            const savedMode = localStorage.getItem('pt_timer_mode');
+            if(savedMode) currentMode = savedMode;
+            
+            const savedTotalTime = localStorage.getItem('pt_total_time');
+            if(savedTotalTime) currentTotalTime = parseInt(savedTotalTime);
+            else currentTotalTime = WORK_TIME;
 
-            updateDailyStreak(); updateUI();
-        }
-
-        function toggleTimer() {
-            requestNotificationPermission();
-            if (isRunning) {
-                clearInterval(timerInterval); startBtn.innerText = "Tiếp tục"; isRunning = false;
-            } else {
-                startBtn.innerText = "Tạm dừng"; isRunning = true;
-                timerInterval = setInterval(() => {
-                    timeRemaining--;
-                    if(currentMode === 'WORK') { localStorage.setItem('pt_timer_time', timeRemaining); localStorage.setItem('pt_timer_mode', 'WORK'); }
-                    updateUI();
-                    
-                    if (timeRemaining <= 0) { 
-                        clearInterval(timerInterval); isRunning = false; playSound(); 
-
-                        if (currentMode === 'WORK') {
-                            currentMode = 'SELECT'; pushOSNotification("Đến giờ vận động rồi! 🚀", "Hãy đứng dậy vài phút để giải phóng cột sống của bạn nhé."); updateUI();
-                        } else if (currentMode === 'EXERCISE') {
-                            increaseStreak(); pushOSNotification("Tuyệt vời! 🎉", "Bạn đã hoàn thành bài tập. Tiếp tục giữ phong độ nhé!");
-                            exerciseSubtitle.innerText = "Tuyệt vời! Bạn đã hoàn thành bài tập.";
-                            mainControls.style.display = 'none'; btnBackToWork.style.display = 'block'; addTimeContainer.style.display = 'none';
-                        }
+            const timerState = localStorage.getItem('pt_timer_state');
+            
+            if (timerState === 'RUNNING') {
+                const savedEndTime = parseInt(localStorage.getItem('pt_end_time'));
+                if (savedEndTime) {
+                    timeRemaining = Math.ceil((savedEndTime - Date.now()) / 1000);
+                    if (timeRemaining <= 0) {
+                        // Nếu đi ra ngoài trang quá lâu và đã hết giờ
+                        timeRemaining = 0;
+                        isRunning = false;
+                        localStorage.setItem('pt_timer_state', 'STOPPED');
+                        updateUI();
+                        handleTimerComplete();
+                    } else {
+                        // Vẫn còn thời gian, tiếp tục chạy
+                        isRunning = true;
+                        startBtn.innerText = "Tạm dừng";
+                        targetEndTime = savedEndTime;
+                        updateUI();
+                        startInterval();
                     }
-                }, 1000);
+                }
+            } else if (timerState === 'PAUSED') {
+                const savedTime = localStorage.getItem('pt_timer_time');
+                timeRemaining = savedTime !== null ? parseInt(savedTime) : currentTotalTime;
+                isRunning = false;
+                startBtn.innerText = "Tiếp tục";
+                updateUI();
+            } else {
+                // STOPPED
+                timeRemaining = WORK_TIME;
+                currentMode = 'WORK';
+                currentTotalTime = WORK_TIME;
+                updateUI();
             }
-        }
 
-        function returnToWork() {
-            currentMode = 'WORK'; currentTotalTime = WORK_TIME; timeRemaining = WORK_TIME;
-            startBtn.innerText = "Bắt Đầu"; localStorage.setItem('pt_timer_time', timeRemaining); localStorage.setItem('pt_timer_mode', 'WORK');
-            updateUI(); toggleTimer(); 
-        }
-
-        function resetTimer() {
-            clearInterval(timerInterval); isRunning = false; startBtn.innerText = "Bắt Đầu"; currentMode = 'WORK';
-            currentTotalTime = WORK_TIME; timeRemaining = WORK_TIME; localStorage.setItem('pt_timer_time', timeRemaining); localStorage.setItem('pt_timer_mode', 'WORK');
-            updateUI();
+            updateDailyStreak(); 
         }
 
         loadFromLocalStorage();
