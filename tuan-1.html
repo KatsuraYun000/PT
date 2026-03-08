@@ -5,7 +5,7 @@
     <title>Tuần 1 - Trợ Lý Cột Sống</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root { 
             --bg-body: #f8fafc; --bg-card: #ffffff; 
@@ -22,28 +22,28 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; color: var(--text-main); background-color: var(--bg-body); transition: 0.3s; }
+        body { font-family: 'Montserrat', sans-serif; color: var(--text-main); background-color: var(--bg-body); transition: 0.3s; font-size: 17px; line-height: 1.7;}
 
         header { background-color: var(--bg-card); padding: 20px 5%; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); transition: 0.3s;}
-        .btn-back { text-decoration: none; color: var(--blue-dark); font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; background-color: var(--blue-light); transition: 0.3s; }
+        .btn-back { text-decoration: none; color: var(--blue-dark); font-weight: bold; font-size: 17px; display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; background-color: var(--blue-light); transition: 0.3s; }
         .btn-back:hover { filter: brightness(0.95); transform: translateX(-5px); }
         .btn-icon-tool { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-main); margin-left: auto; transition: 0.3s;}
 
         .page-title { text-align: center; padding: 50px 20px 30px; }
-        .page-title h1 { color: var(--blue-dark); font-size: 32px; margin-bottom: 10px; }
-        .page-title p { font-size: 18px; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+        .page-title h1 { color: var(--blue-dark); font-size: 34px; margin-bottom: 10px; font-weight: 800;}
+        .page-title p { font-size: 18px; color: var(--text-muted); max-width: 600px; margin: 0 auto; font-weight: 500;}
 
         .schedule-container { max-width: 900px; margin: 0 auto 80px; padding: 0 20px; }
-        .day-group { background-color: var(--bg-card); border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); border-left: 6px solid var(--blue-primary); transition: 0.3s; border: 1px solid var(--border-color);}
+        .day-group { background-color: var(--bg-card); border-radius: 15px; padding: 35px; margin-bottom: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); border-left: 6px solid var(--blue-primary); transition: 0.3s; border: 1px solid var(--border-color);}
         .day-group:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(37, 99, 235, 0.1); }
-        .day-title { color: var(--blue-dark); font-size: 24px; border-bottom: 2px dashed var(--border-color); padding-bottom: 15px; margin-bottom: 20px; }
+        .day-title { color: var(--blue-dark); font-size: 24px; border-bottom: 2px dashed var(--border-color); padding-bottom: 15px; margin-bottom: 20px; font-weight: 800;}
         
         .time-block { margin-bottom: 25px; }
         .time-block:last-child { margin-bottom: 0; }
-        .time-label { display: inline-block; background-color: var(--blue-light); color: var(--blue-primary); font-weight: bold; padding: 5px 15px; border-radius: 20px; margin-bottom: 10px; }
+        .time-label { display: inline-block; background-color: var(--blue-light); color: var(--blue-primary); font-weight: bold; padding: 6px 18px; border-radius: 20px; margin-bottom: 15px; font-size: 16px;}
         
         .task-list { list-style: none; }
-        .task-list li { position: relative; padding-left: 25px; margin-bottom: 10px; font-size: 16px; line-height: 1.6; color: var(--text-main);}
+        .task-list li { position: relative; padding-left: 25px; margin-bottom: 12px; font-size: 17px; font-weight: 500;}
         .task-list li::before { content: "🔹"; position: absolute; left: 0; color: var(--blue-primary); }
 
         .fade-in { opacity: 0; transform: translateY(30px); transition: 0.6s ease-out; }
@@ -58,7 +58,7 @@
     </header>
 
     <div class="page-title fade-in">
-        <h1>Tuần 1: Tăng nhận thức và làm quen với Web</h1>
+        <h1>Tuần 1: Tăng nhận thức và làm quen</h1>
         <p>Mục tiêu: Đánh giá tư thế hiện tại và làm quen với nhịp độ vận động giãn cơ cơ bản.</p>
     </div>
 
@@ -71,24 +71,24 @@
                 <div class="time-label">🌅 Buổi Sáng</div>
                 <ul class="task-list">
                     <li>Hít thở: hít sâu vào bằng mũi thở ra chậm bằng miệng (thở ra gấp 2 - 3 lần hít vào).</li>
-                    <li>Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...).</li>
-                    <li>Hít thở kết hợp gập duỗi cổ nhẹ nhàng.</li>
+                    <li>Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...). Tối thiểu 1 phút.</li>
+                    <li>Hít thở kết hợp gập duỗi cổ nhẹ nhàng. (5 lần x 3 hiệp, mỗi hiệp nghỉ 30s).</li>
                 </ul>
             </div>
 
             <div class="time-block">
                 <div class="time-label">☀️ Buổi Chiều</div>
                 <ul class="task-list">
-                    <li>Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...).</li>
-                    <li>Gập thân mình tới trước / ưỡn người về phía sau.</li>
+                    <li>Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...). Tối thiểu 1 phút.</li>
+                    <li>Gập thân mình tới trước / ưỡn người về phía sau. (5 lần x 3 hiệp, mỗi hiệp nghỉ 30s).</li>
                 </ul>
             </div>
 
             <div class="time-block">
                 <div class="time-label">🌙 Buổi Tối</div>
                 <ul class="task-list">
-                    <li>Xoay cổ sang trái / phải giữ lại 30s lặp lại 5 lần.</li>
-                    <li>Nghiêng đầu sang trái / phải giữ lại 30s lặp lại 5 lần.</li>
+                    <li>Xoay cổ sang trái / phải giữ lại 30s lặp lại 5 lần mỗi bên.</li>
+                    <li>Nghiêng đầu sang trái / phải giữ lại 30s lặp lại 5 lần mỗi bên.</li>
                 </ul>
             </div>
         </div>
@@ -99,25 +99,25 @@
             <div class="time-block">
                 <div class="time-label">🌅 Buổi Sáng</div>
                 <ul class="task-list">
-                    <li>Hít thở kết hợp xoay vai (hít sâu vào bằng mũi thở ra chậm bằng miệng, thở ra gấp 2 - 3 lần hít vào).</li>
-                    <li>Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...).</li>
-                    <li>Hít thở kết hợp xoay thân mình sang trái / phải.</li>
+                    <li>Hít thở kết hợp xoay vai (hít sâu vào bằng mũi thở ra chậm bằng miệng, thở ra gấp 2 - 3 lần hít vào). (5 lần x 3 hiệp, mỗi hiệp nghỉ 30s).</li>
+                    <li>Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...). Tối thiểu 1 phút.</li>
+                    <li>Hít thở kết hợp xoay thân mình sang trái / phải. (5 lần x 3 hiệp, mỗi hiệp nghỉ 30s).</li>
                 </ul>
             </div>
 
             <div class="time-block">
                 <div class="time-label">☀️ Buổi Chiều</div>
                 <ul class="task-list">
-                    <li>Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...).</li>
-                    <li>Đứng lên xoay hông 10 lần.</li>
+                    <li>Đứng lên và di chuyển (đứng - ngồi tại chỗ, đi uống nước, ăn nhẹ, vệ sinh,...). Tối thiểu 1 phút.</li>
+                    <li>Đứng lên xoay hông 5 lần mỗi chiều.</li>
                 </ul>
             </div>
 
             <div class="time-block">
                 <div class="time-label">🌙 Buổi Tối</div>
                 <ul class="task-list">
-                    <li>Xoay cổ sang trái / phải giữ lại 30s lặp lại 5 lần.</li>
-                    <li>Nghiêng đầu sang trái / phải giữ lại 30s lặp lại 5 lần.</li>
+                    <li>Xoay cổ sang trái / phải giữ lại 30s lặp lại 5 lần mỗi bên, mỗi lần nghỉ 30s.</li>
+                    <li>Nghiêng đầu sang trái / phải giữ lại 30s lặp lại 5 lần mỗi bên, mỗi lần nghỉ 30s.</li>
                 </ul>
             </div>
         </div>
