@@ -5,7 +5,7 @@
     <title>Đồng Hồ Phục Hồi - Trợ Lý Cột Sống</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         :root { 
@@ -27,12 +27,20 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* CẬP NHẬT FONT MONTSERRAT */
         body { 
-            font-family: 'Inter', sans-serif; 
+            font-family: 'Montserrat', sans-serif; 
             color: var(--text-main); background-color: var(--bg-body); 
             display: flex; flex-direction: column; align-items: center; 
             min-height: 100vh; transition: background-color 0.3s ease, color 0.3s ease;
             padding-bottom: 50px;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        button, input, select, textarea {
+            font-family: inherit; 
         }
 
         header { width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;}
@@ -213,6 +221,7 @@
             
             <div id="workTimeTooltip" class="custom-tooltip">
                 <span>💡 Thời gian khuyến nghị là 90 phút</span>
+                <button type="button" class="tooltip-close" onclick="closeWorkTimeTooltip(event)">×</button>
             </div>
         </div>
         
@@ -266,7 +275,7 @@
     <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2820/2820-preview.mp3" preload="auto"></audio>
 
     <script>
-        // LOGIC DARK MODE CHO TIMER
+        // LOGIC DARK MODE
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
@@ -284,7 +293,6 @@
             document.getElementById('workTimeTooltip').classList.remove('show');
         }
 
-        // Đóng tooltip khi click ra chỗ khác
         document.addEventListener('click', function(event) {
             var input = document.getElementById('workMinInput');
             var tooltip = document.getElementById('workTimeTooltip');
@@ -292,6 +300,49 @@
                 tooltip.classList.remove('show');
             }
         });
+
+        // ====================================================================
+        // 1. HÀM XIN QUYỀN THÔNG BÁO (Gọi khi người dùng bấm nút Bắt Đầu)
+        // ====================================================================
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                return;
+            }
+            if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+                Notification.requestPermission();
+            }
+        }
+
+        // ====================================================================
+        // 2. HÀM BẮN THÔNG BÁO TRỰC TIẾP VÀO WINDOWS ACTION CENTER
+        // ====================================================================
+        function pushOSNotification(title, bodyText) {
+            // Kiểm tra xem trình duyệt có hỗ trợ không
+            if (!("Notification" in window)) {
+                return;
+            }
+
+            // Kiểm tra xem đã có quyền chưa
+            if (Notification.permission === "granted") {
+                try {
+                    const notification = new Notification(title, {
+                        body: bodyText,
+                        icon: "https://cdn-icons-png.flaticon.com/512/3048/3048122.png", // Icon cái đồng hồ
+                        requireInteraction: true // Lệnh này cực kỳ quan trọng: Ép thông báo lưu lại trong Action Center cho đến khi người dùng tự tắt
+                    });
+
+                    // Khi người dùng click vào cái thông báo ở góc màn hình, tự động mở lại tab web
+                    notification.onclick = function() {
+                        window.focus(); 
+                        this.close();
+                    };
+                } catch (error) {
+                    // Xử lý dự phòng nếu một số trình duyệt từ chối requireInteraction
+                    new Notification(title, { body: bodyText, icon: "https://cdn-icons-png.flaticon.com/512/3048/3048122.png" });
+                }
+            } 
+            // Nếu bị chặn quyền thì web sẽ im lặng không làm gì cả, không hiện popup nữa
+        }
 
         // CƠ SỞ DỮ LIỆU ĐÃ ĐƯỢC CHUẨN HÓA THỜI GIAN THEO KẾ HOẠCH
         const exerciseDB = {
@@ -374,18 +425,6 @@
         const alarmSound = document.getElementById('alarmSound');
         const volumeSlider = document.getElementById('volumeSlider');
         const circleCircumference = 2 * Math.PI * 140;
-
-        function requestNotificationPermission() {
-            if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
-                Notification.requestPermission();
-            }
-        }
-
-        function pushOSNotification(title, bodyText) {
-            if ("Notification" in window && Notification.permission === "granted") {
-                new Notification(title, { body: bodyText, icon: "https://cdn-icons-png.flaticon.com/512/3048/3048122.png" });
-            }
-        }
 
         function showToast(message) {
             const toast = document.getElementById("toast");
@@ -541,7 +580,8 @@
         }
 
         function toggleTimer() {
-            requestNotificationPermission();
+            requestNotificationPermission(); 
+            
             if (isRunning) {
                 clearInterval(timerInterval); 
                 isRunning = false;
@@ -567,9 +607,12 @@
         function handleTimerComplete() {
             playSound(); 
             if (currentMode === 'WORK') {
-                currentMode = 'SELECT'; pushOSNotification("Đến giờ vận động rồi! 🚀", "Hãy đứng dậy vài phút để giải phóng cột sống của bạn nhé."); updateUI();
+                currentMode = 'SELECT'; 
+                pushOSNotification("⏰ Cột sống đang kêu cứu!", "Đã hết thời gian ngồi tĩnh. Mở web lên và chọn bài tập giải phóng cột sống nhé!"); 
+                updateUI();
             } else if (currentMode === 'EXERCISE') {
-                increaseStreak(); pushOSNotification("Tuyệt vời! 🎉", "Bạn đã hoàn thành bài tập. Tiếp tục giữ phong độ nhé!");
+                increaseStreak(); 
+                pushOSNotification("🎉 Tuyệt vời!", "Bạn đã hoàn thành bài tập. Tiếp tục giữ phong độ và làm việc hiệu quả nhé!");
                 exerciseSubtitle.innerText = "Tuyệt vời! Bạn đã hoàn thành bài tập.";
                 mainControls.style.display = 'none'; btnBackToWork.style.display = 'block'; addTimeContainer.style.display = 'none';
             }
