@@ -137,29 +137,29 @@
         </div>
 
         <div id="redFlagSection" class="card">
-            <div class="card-title"><span class="step-badge">Bước 1</span> Sàng lọc An toàn (Red Flags)</div>
+            <div class="card-title"><span class="step-badge">Bước 1</span> Sàng lọc An toàn</div>
             <div class="red-flag-box">
                 <h3>🚨 Cảnh báo bắt buộc</h3>
-                <p style="font-size: 15px; color: var(--text-main);">Vui lòng trả lời trung thực các câu hỏi sau để đảm bảo bạn an toàn khi bắt đầu tự tập luyện tại nhà.</p>
+                <p style="font-size: 15px; color: var(--text-main);">Vui lòng trả lời trung thực các câu hỏi sau để đảm bảo bạn an toàn khi bắt đầu tự tập luyện.</p>
             </div>
 
             <form id="redFlagForm">
                 <div class="question-row">
                     <div class="question-text">1. Gần đây bạn có bị sụt cân nhanh chóng mà không rõ nguyên nhân không?</div>
-                    <div class="radio-group-inline">
+                    <div class="radio-group-inline
                         <input type="radio" id="rf1_yes" name="rf1" value="yes" class="hidden-input"><label for="rf1_yes" class="radio-btn-label yes-btn">Có</label>
                         <input type="radio" id="rf1_no" name="rf1" value="no" class="hidden-input" checked><label for="rf1_no" class="radio-btn-label no-btn">Không</label>
                     </div>
                 </div>
                 <div class="question-row">
-                    <div class="question-text">2. Bạn có bị đau dữ dội vào ban đêm, đau đến mức tỉnh giấc không?</div>
+                    <div class="question-text">2. Bạn có bị đau dữ dội đến mức tỉnh giấc vào ban đêm không?</div>
                     <div class="radio-group-inline">
                         <input type="radio" id="rf2_yes" name="rf2" value="yes" class="hidden-input"><label for="rf2_yes" class="radio-btn-label yes-btn">Có</label>
                         <input type="radio" id="rf2_no" name="rf2" value="no" class="hidden-input" checked><label for="rf2_no" class="radio-btn-label no-btn">Không</label>
                     </div>
                 </div>
                 <div class="question-row">
-                    <div class="question-text">3. Bạn có bị tê vùng mông, bẹn hoặc khó kiểm soát việc đi vệ sinh (đại tiện/tiểu tiện) không?</div>
+                    <div class="question-text">3. Bạn có bị tê vùng mông, bẹn hoặc khó kiểm soát việc đi vệ sinh không?</div>
                     <div class="radio-group-inline">
                         <input type="radio" id="rf3_yes" name="rf3" value="yes" class="hidden-input"><label for="rf3_yes" class="radio-btn-label yes-btn">Có</label>
                         <input type="radio" id="rf3_no" name="rf3" value="no" class="hidden-input" checked><label for="rf3_no" class="radio-btn-label no-btn">Không</label>
@@ -173,7 +173,7 @@
                     </div>
                 </div>
                 <div class="question-row">
-                    <div class="question-text">5. Bạn có đột ngột thấy yếu tay chân, đi lại hay bị vấp ngã, hoặc hay làm rơi đồ vật không?</div>
+                    <div class="question-text">5. Bạn có đột ngột thấy yếu tay chân, hay bị vấp ngã, làm rơi đồ vật không?</div>
                     <div class="radio-group-inline">
                         <input type="radio" id="rf5_yes" name="rf5" value="yes" class="hidden-input"><label for="rf5_yes" class="radio-btn-label yes-btn">Có</label>
                         <input type="radio" id="rf5_no" name="rf5" value="no" class="hidden-input" checked><label for="rf5_no" class="radio-btn-label no-btn">Không</label>
@@ -185,9 +185,9 @@
 
         <div id="medicalAlert" class="card">
             <h2>🚨 NGỪNG TẬP LUYỆN 🚨</h2>
-            <p>Dựa trên câu trả lời của bạn, cơ thể đang có dấu hiệu chèn ép thần kinh hoặc tổn thương cấu trúc nghiêm trọng (Red Flags).</p>
-            <p><strong>Trợ lý Vận động này (chỉ dành cho đau mỏi cơ học văn phòng) KHÔNG CÒN AN TOÀN cho bạn.</strong></p>
-            <p>Vui lòng ngừng tự tập luyện và đến gặp Bác sĩ chuyên khoa Thần kinh / Cột sống hoặc Chuyên viên Vật lý trị liệu để được thăm khám lâm sàng ngay lập tức.</p>
+            <p>Dựa trên câu trả lời của bạn, cơ thể đang có dấu hiệu chèn ép thần kinh hoặc tổn thương cấu trúc nghiêm trọng.</p>
+            <p><strong>Move Assist KHÔNG CÒN AN TOÀN cho bạn.</strong></p>
+            <p>Vui lòng không tập luyện và đến gặp Bác sĩ chuyên khoa hoặc Chuyên viên Vật lý trị liệu để được thăm khám ngay lập tức.</p>
             <a href="index.html" class="btn-emergency">Quay về Trang chủ</a>
         </div>
 
@@ -195,9 +195,9 @@
             <div class="card-title"><span class="step-badge">Bước 2</span> Khảo sát Tình trạng cơ thể</div>
             
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('tab-nordic')">1. Nordic (Vị trí)</button>
-                <button class="tab-btn" onclick="switchTab('tab-cmdq')">2. Cornell (Mức độ)</button>
-                <button class="tab-btn" onclick="switchTab('tab-vas')">3. Chỉ số Đau (VAS)</button>
+                <button class="tab-btn active" onclick="switchTab('tab-nordic')">1. Nordic</button>
+                <button class="tab-btn" onclick="switchTab('tab-cmdq')">2. Cornell</button>
+                <button class="tab-btn" onclick="switchTab('tab-vas')">3. Chỉ số Đau</button>
             </div>
 
             <div id="tab-nordic" class="tab-content active">
@@ -386,7 +386,6 @@
                     adviceHtml += `<li><strong>💡 Lời khuyên Ứng dụng:</strong> Cơ thể là một chuỗi động học liên kết. Việc tuân thủ tập luyện toàn thân theo phác đồ 4 tuần là cách tốt nhất để bảo vệ sức khỏe và phòng ngừa đau mỏi.</li>`;
                 }
 
-                citationHtml = "Nguồn tham khảo: Kuorinka, I., et al. (1987). Standardised Nordic questionnaires for the analysis of musculoskeletal symptoms. Applied ergonomics.";
             } 
             else if (scaleType === 'cmdq') {
                 let fText = document.querySelector('input[name="freq"]:checked').nextElementSibling.innerText;
@@ -417,7 +416,6 @@
                 - Mức độ cản trở công việc: ${iText}</li>
                 <li><strong>Nhận định Lâm sàng:</strong> ${cmdqAssessment}</li>`;
 
-                citationHtml = "Nguồn tham khảo: Hedge, A., Morimoto, S., & McCrobie, D. (1999). Effects of keyboard tray geometry on upper body posture and comfort. Ergonomics.";
             } 
             else if (scaleType === 'vas') {
                 let vas = parseInt(document.getElementById('vasSlider').value);
@@ -444,7 +442,6 @@
                 adviceHtml += `<li><strong>Cường độ đau hiện tại (Thang VAS):</strong> <strong style="color: var(--danger); font-size: 22px;">${vas}/10</strong> (${vasText}).</li>
                 <li><strong>Khuyến nghị Xử trí:</strong> ${vasAdvice}</li>`;
 
-                citationHtml = "Nguồn tham khảo: Huskisson, E. C. (1974). Measurement of pain. The Lancet.";
             }
 
             document.getElementById('prescriptionList').innerHTML = adviceHtml;
