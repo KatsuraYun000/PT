@@ -115,7 +115,7 @@
         .prescription-list li { position: relative; padding-left: 0; margin-bottom: 20px; font-size: 17px; color: var(--text-main); text-align: justify; line-height: 1.7; padding: 20px; background: var(--bg-body); border-radius: 12px; border-left: 4px solid var(--blue-primary);}
         .prescription-list li strong { color: var(--blue-dark); font-size: 18px; display: block; margin-bottom: 8px;}
         
-        .source-citation { font-size: 14px; color: var(--text-muted); font-style: italic; text-align: right; margin-bottom: 30px; padding-right: 10px;}
+        .source-citation { font-size: 14px; color: var(--text-muted); font-style: Montserrat; text-align: right; margin-bottom: 30px; padding-right: 10px;}
 
         .btn-start-timer { display: block; width: 100%; padding: 20px; background: var(--success); color: white; text-align: center; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 18px; transition: 0.3s; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);}
         .btn-start-timer:hover { filter: brightness(1.1); transform: translateY(-3px); }
@@ -354,8 +354,8 @@
                 let hasLegs = selectedRegions.includes('Hông/Đùi') || selectedRegions.includes('Hai đầu gối');
 
                 if (selectedRegions.length > 0) {
-                    adviceHtml += `<li><strong>Phân tích vùng tổn thương (Thang Nordic):</strong> <span style="color: var(--orange-primary); font-weight: bold;">${selectedRegions.join(", ")}</span>.<br><br>
-                    <em style="font-weight:600; color: var(--text-muted);">Đánh giá Sinh cơ học:</em><br>`;
+                    adviceHtml += `<li><strong>Phân tích vùng tổn thương (Thang Nordic):</strong> <span style="color: var(--orange-primary); font-weight: bold;">${selectedRegions.join(", ")}</span>.<br>
+                    <em style="font-weight:600; color: var(--text-muted);"`;
                     
                     if (hasNeck) {
                         adviceHtml += `- <strong>Nhóm Cổ & Vai:</strong> Bạn đang có dấu hiệu quá tải cột sống cổ cao. Việc nhô đầu về phía trước khi nhìn màn hình làm nhóm cơ cổ sau và cơ thang bị kéo căng liên tục, dễ gây cứng gáy.<br>`;
@@ -381,7 +381,7 @@
                 if(hasLegs) focusExercises.push("Lunge", "Đứng lên xoay hông");
 
                 if (focusExercises.length > 0) {
-                    adviceHtml += `<li><strong>💡 Lời khuyên Ứng dụng:</strong> Dù bạn đang ở bất kỳ tuần nào trong Lộ trình, khi Đồng hồ đếm ngược gọi tên các bài tập như <strong style="color: var(--orange-primary);">${focusExercises.join(", ")}</strong>, hãy thực hiện với 120% sự tập trung. Tập chậm hơn, hít thở sâu và giữ thế căng cơ lâu hơn 5 giây. Đó là các bài tập khóa chốt dành riêng cho bạn!</li>`;
+                    adviceHtml += `<li><strong>💡 Lời khuyên Ứng dụng:</strong> Dù bạn đang ở bất kỳ tuần nào trong Lộ trình, khi Đồng hồ đếm ngược gọi tên các bài tập như<strong style="color: var(--orange-primary);">${focusExercises.join(", ")}</strong>hãy thực hiện với 120% sự tập trung. Tập chậm hơn, hít thở sâu và giữ thế căng cơ lâu hơn 5 giây. Đó là các bài tập khóa chốt dành riêng cho bạn!</li>`;
                 } else {
                     adviceHtml += `<li><strong>💡 Lời khuyên Ứng dụng:</strong> Cơ thể là một chuỗi động học liên kết. Việc tuân thủ tập luyện toàn thân theo phác đồ 4 tuần là cách tốt nhất để bảo vệ sức khỏe và phòng ngừa đau mỏi.</li>`;
                 }
@@ -410,7 +410,7 @@
                     cmdqAssessment = "Dấu hiệu mỏi cơ sinh lý do duy trì tư thế tĩnh quá lâu. Hoàn toàn có thể khắc phục triệt để bằng việc tuân thủ lịch tập luyện nhẹ nhàng đều đặn.";
                 }
 
-                adviceHtml += `<li><strong>Đánh giá Mức độ ảnh hưởng (Thang Cornell):</strong><br><br>
+                adviceHtml += `<li><strong>Đánh giá Mức độ ảnh hưởng (Thang Cornell):</strong>
                 - Tần suất xuất hiện: ${fText}<br>
                 - Cường độ khó chịu: ${sText}<br>
                 - Mức độ cản trở công việc: ${iText}</li>
